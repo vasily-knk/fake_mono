@@ -22,8 +22,6 @@ def list_args(args):
     return ', '.join(argslist)
 
 
-dll_path = r'1_Data\\Mono\\_mono.dll'
-
 
 with open_file('fake_mono.def') as out:
     out.write('LIBRARY "fake_mono"\n'
@@ -55,7 +53,7 @@ with open_file('functions.h') as out:
 
     out.write('};\n'
               '\n'
-              'functions_t load_functions();\n')
+              'functions_t load_mono_functions_from_dll(HMODULE dll);\n')
 
 
 with open_file('functions.cpp') as out:
@@ -63,11 +61,10 @@ with open_file('functions.cpp') as out:
               '#include "functions.h"\n'
               '\n')
 
-    out.write('functions_t load_functions()\n'
-              '{{\n'
+    out.write('functions_t load_mono_functions_from_dll(HMODULE dll)\n'
+              '{\n'
               '    functions_t result;\n'
-              '    HMODULE dll = LoadLibrary(L"{0}");\n'
-              '    \n'.format(dll_path))
+              '    \n')
 
     for func in d['functions']:
         t = function_type(func)
@@ -149,8 +146,8 @@ with open_file('executor_base.h') as out:
         out.write('    {} {}({}) override;\n'.format(ret, name, args))
 
     out.write('\n'
-              'private:\n'
-              '    functions_t functions_;\n'
+              'protected:\n'
+              '    functions_t const &get_f();\n'
               '};\n'
               '\n')
 
@@ -162,8 +159,14 @@ with open_file('executor_base.cpp') as out:
               '\n')
 
     out.write('executor_base::executor_base()\n'
-              '    : functions_(load_functions())\n'
               '{}\n'
+              '\n')
+
+    out.write('functions_t const &mono_functions();\n'
+              'functions_t const &executor_base::get_f()\n'
+              '{\n'
+              '    return ::mono_functions();\n'
+              '}\n'
               '\n')
 
     for func in d['functions']:
@@ -176,7 +179,7 @@ with open_file('executor_base.cpp') as out:
         out.write('{} executor_base::{}({})\n'.format(ret, name, args))
         out.write('{\n')
         out.write('    log_function({});\n'.format(', '.join(log_args_list)))
-        out.write('    return functions_.{}({});\n'.format(name, arg_names))
+        out.write('    return get_f().{}({});\n'.format(name, arg_names))
         out.write('}\n'
                   '\n')
 

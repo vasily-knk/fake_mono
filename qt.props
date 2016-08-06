@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <QT_DIR>D:\Tools\Qt\Qt5.7.0\5.7\msvc2013\</QT_DIR>
+    <QtIncludeDir>$(QT_DIR)include\</QtIncludeDir>
+    <QtLibDir>$(QT_DIR)lib\</QtLibDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(QtIncludeDir);$(QtIncludeDir)QtCore;$(QtIncludeDir)QtWidgets;$(QtIncludeDir)QtGui;$(QtIncludeDir)QtPrintSupport;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QtLibDir);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>qtmain$(LibSuffix).lib;Qt5Core$(LibSuffix).lib;Qt5Widgets$(LibSuffix).lib;Qt5Gui$(LibSuffix).lib;Qt5PrintSupport$(LibSuffix).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="QT_DIR">
+      <Value>$(QT_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtIncludeDir">
+      <Value>$(QtIncludeDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtLibDir">
+      <Value>$(QtLibDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

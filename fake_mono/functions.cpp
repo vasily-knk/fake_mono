@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "functions.h"
 
-functions_t load_functions()
+functions_t load_mono_functions_from_dll(HMODULE dll)
 {
     functions_t result;
-    HMODULE dll = LoadLibrary(L"1_Data\\Mono\\_mono.dll");
     
     result.mono_thread_suspend_all_other_threads = reinterpret_cast<functions_t::mono_thread_suspend_all_other_threads_t>(GetProcAddress(dll, "mono_thread_suspend_all_other_threads"));
     result.mono_thread_pool_cleanup = reinterpret_cast<functions_t::mono_thread_pool_cleanup_t>(GetProcAddress(dll, "mono_thread_pool_cleanup"));

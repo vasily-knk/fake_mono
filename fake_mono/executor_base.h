@@ -225,7 +225,7 @@ struct executor_base
     gint64 mono_gc_get_used_size() override;
     gint64 mono_gc_get_heap_size() override;
 
-private:
-    functions_t functions_;
+protected:
+    functions_t const &get_f();
 };
 
