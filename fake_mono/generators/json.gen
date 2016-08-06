@@ -1,0 +1,14 @@
+#define ARG(tp, nm) { "name": #nm, "type": #tp, "array": false }
+#define ARG_ARR(tp, nm) { "name": #nm, "type": #tp, "array": true }
+
+#define DO_API(ret, nm, a) { "name": #nm, "return_type": #ret, "args": [ a ] },
+
+functions : [
+
+#include "functions_inc.h"
+
+]
+
+
+
+#undef DO_API
