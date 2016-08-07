@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "monitor.h"
+#include "stats.h"
 
 #include "stl_helpers.h"
 
@@ -28,15 +29,31 @@ namespace
         post_f f;
     };
 
+    void fuck()
+    {
+        int aaa = 5;
+    }
+
     struct monitor_widget
         : QWidget
     {
-        monitor_widget()
+        monitor_widget(post_service_f const &post_service)
+            : post_service_(post_service)
         {
             auto layout = new QVBoxLayout(this);
 
+            auto btn = new QPushButton("Click me!");
+
+            connect(btn, &QPushButton::clicked, 
+                [this]()
+            {
+                post_service_(&fuck);
+            });
+
             label_ = new QTextEdit();
+            layout->addWidget(btn);
             layout->addWidget(label_);
+
         }
         
         bool event(QEvent* e) override
@@ -60,6 +77,7 @@ namespace
 
     private:
         QTextEdit *label_ = nullptr;
+        post_service_f post_service_;
     };
 
     std::unique_ptr<monitor_widget> g_monitor;
@@ -71,12 +89,12 @@ namespace
 
 }
 
-void run()
+void run(post_service_f const &post_service)
 {
     int argv = 0;
     QApplication app(argv, nullptr);
 
-    g_monitor = std::make_unique<monitor_widget>();
+    g_monitor = std::make_unique<monitor_widget>(post_service);
     g_monitor->show();
     app.exec();
 }

@@ -65,6 +65,8 @@ std::ostream &log_stream();
 template<typename... Args>
 void log_function(char const *name, Args&&... args)
 {
+    auto id = boost::this_thread::get_id();
+    
     if (false)
     {
         auto &s = log_stream();

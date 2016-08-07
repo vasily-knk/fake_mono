@@ -19,6 +19,7 @@ private:
 
 private:
     void process_fixed_update();
+    void post(std::function<void()> const &task);
 
 private:
     void add_assembly(MonoAssembly *assembly, char const *fname);
@@ -46,4 +47,8 @@ private:
 
 private:
     boost::thread monitor_thread_;
+
+private:
+    vector<std::function<void()>> tasks_;
+    boost::mutex tasks_mutex_;
 };
