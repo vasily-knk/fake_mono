@@ -12,18 +12,37 @@ struct executor_impl
     MonoObject* mono_runtime_invoke(MonoMethod* method, void* obj, void** params, MonoObject** exc) override;
 
 private:
-    void print_stats();
-    void update_stats(char const *class_name, char const *name);
+    MonoAssembly* mono_assembly_open(const char* filename, int* status) override;
+    MonoAssembly* mono_assembly_load_from(MonoImage* image, const char* fname, int* status) override;
+    MonoAssembly* mono_assembly_load_from_full(MonoImage* image, const char* fname, int* status, gboolean refonly) override;
+    void mono_assembly_close(MonoAssembly* assembly) override;
 
 private:
-    void update_uber_pool_group(MonoObject *obj);
+    void process_fixed_update();
 
 private:
-    stats_t stats_;
-    boost::mutex stats_mutex_;
+    void add_assembly(MonoAssembly *assembly, char const *fname);
 
-    typedef std::chrono::time_point<std::chrono::system_clock> time_point_t;
-    optional<time_point_t> last_stats_update_;
+    bool check_unity_engine_assembly(char const *fname);
+    void init_unity_engine_assembly(MonoAssembly *assembly);
+
+    vector<string> get_assembly_names();
+
+    MonoImage *executor_impl::find_image_by_name(char const *name);
+    MonoObject *get_type_by_name(char const *name);
+
+private:
+    struct assembly_desc_t
+    {
+        string name;
+        MonoImage *image;
+    };
+
+    typedef std::map<MonoAssembly *, assembly_desc_t> assemblies_t;
+
+    assemblies_t assemblies_;
+    MonoAssembly *unity_engine_assembly_ = nullptr;
+    boost::mutex mutex_;
 
 private:
     boost::thread monitor_thread_;

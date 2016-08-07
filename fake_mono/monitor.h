@@ -10,6 +10,6 @@ void run();
 typedef std::function<void()> post_f;
 void post(post_f const &f);
 
-void update_stats(stats_t const &st);
+void print(string const &str);
 
 } // namespace monitor

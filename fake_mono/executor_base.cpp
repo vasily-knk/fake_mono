@@ -1272,7 +1272,7 @@ void executor_base::mono_unity_liveness_calculation_end(LivenessState* state)
 }
 
 void executor_base::mono_unity_liveness_calculation_from_root(MonoObject* root, LivenessState* state)
-{
+{                                                                   
     log_function("mono_unity_liveness_calculation_from_root", root, state);
     return get_f().mono_unity_liveness_calculation_from_root(root, state);
 }

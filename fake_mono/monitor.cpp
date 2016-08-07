@@ -64,26 +64,11 @@ namespace
 
     std::unique_ptr<monitor_widget> g_monitor;
 
-    void print_stats(stats_t const &st)
+    void print_impl(string const &str)
     {
-        if (st.empty())
-            return;
-        
-        typedef std::pair<stats_key_t, int> stats_record_t;
-        auto cmp = [](stats_record_t const &a, stats_record_t const &b)
-        {
-            return a.second > b.second;
-        };
-
-        vector<stats_record_t> sorted = stl_helpers::container_from_range(st);
-        boost::sort(sorted, cmp);
-
-        std::stringstream ss;
-
-        for (auto const &r : sorted)
-            ss << r.first.first << "." << r.first.second << ": " << r.second << "\n";
-        g_monitor->print(ss.str());
+        g_monitor->print(str);
     }
+
 }
 
 void run()
@@ -102,9 +87,9 @@ void post(post_f const &f)
 }
 
 
-void update_stats(stats_t const &st)
+void print(string const &str)
 {
-    post(std::bind(print_stats, st));
+    post(std::bind(print_impl, str));
 }
 
 } // namespace monitor
