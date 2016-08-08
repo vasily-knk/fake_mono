@@ -44,13 +44,15 @@ typedef int gint32;
 typedef long gint64;
 typedef unsigned char   guchar;
 typedef UInt16 gunichar2;
-struct MonoString 
-{
-	gint32 monoObjectPart1;
-	gint32 monoObjectPart2;
-	gint32 length;
-	gunichar2 firstCharacter;
-};
+// struct MonoString 
+// {
+// 	gint32 monoObjectPart1;
+// 	gint32 monoObjectPart2;
+// 	gint32 length;
+// 	gunichar2 firstCharacter;
+// };
+
+typedef MonoObject MonoString;
 
 struct MonoMethod {
 	UInt16 flags;

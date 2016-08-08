@@ -10,7 +10,7 @@ struct Object
 {
     virtual ~Object() {};
 
-    virtual Object_ptr ToString() = 0;
+    virtual String_ptr ToString() = 0;
     virtual bool Equals(Object_ptr obj) = 0;
 
     virtual MonoObject *get_mono_object() const = 0;

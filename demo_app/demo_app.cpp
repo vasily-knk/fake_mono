@@ -2,6 +2,8 @@
 #include "mono_wrapper/functions.h"
 #include "mono_wrapper/object_base.h"
 
+#include "mono_wrapper/String.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -23,6 +25,13 @@ int main(int argc, char* argv[])
     }
 
     MonoDomain* domain = f->mono_jit_init("My domain");
+
+    auto s = new_String(f, "Hello!");
+    auto s1 = s->ToUpper();
+
+    string s1_content = s1->to_utf8();
+
+    int32_t len = s->get_Length();
 
 	return 0;
 }

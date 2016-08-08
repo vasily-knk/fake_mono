@@ -10,4 +10,6 @@ namespace mono_wrapper
 
     struct Object;
     typedef shared_ptr<Object> Object_ptr;
+    struct String;
+    typedef shared_ptr<String> String_ptr;
 }

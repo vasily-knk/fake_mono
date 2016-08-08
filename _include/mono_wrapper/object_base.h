@@ -36,9 +36,22 @@ public:
         return f_->mono_class_get_method_from_name(klass, name, params_count);
     }
 
+    MonoMethod *get_getter(char const *name) const
+    {
+        MonoClass *klass = f_->mono_object_get_class(get_object());
+        MonoProperty *prop = f_->mono_class_get_property_from_name(klass, name);
+        return f_->mono_property_get_get_method(prop);
+    }
+
     MonoObject *invoke_method(MonoMethod *m, void *args[]) const
     {
         return f_->mono_runtime_invoke(m, get_object(), args, nullptr);
+    }
+    
+    template<typename T>
+    T unbox(MonoObject *obj) const
+    {
+        return *static_cast<T const *>(f_->mono_object_unbox(obj));
     }
 
     functions_cptr get_f() const

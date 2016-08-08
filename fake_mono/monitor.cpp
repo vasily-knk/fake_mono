@@ -29,9 +29,9 @@ namespace
         post_f f;
     };
 
-    void fuck()
+    void fuck(post_f const &callback)
     {
-        int aaa = 5;
+        post(callback);
     }
 
     struct monitor_widget
@@ -42,16 +42,12 @@ namespace
         {
             auto layout = new QVBoxLayout(this);
 
-            auto btn = new QPushButton("Click me!");
+            btn_ = new QPushButton("Click me!");
 
-            connect(btn, &QPushButton::clicked, 
-                [this]()
-            {
-                post_service_(&fuck);
-            });
+            connect(btn_, &QPushButton::clicked, boost::bind(&monitor_widget::btn_clicked, this));
 
             label_ = new QTextEdit();
-            layout->addWidget(btn);
+            layout->addWidget(btn_);
             layout->addWidget(label_);
 
         }
@@ -75,8 +71,22 @@ namespace
             label_->setText(QString::fromStdString(str));
         }
 
+        void btn_clicked()
+        {
+            post_f callback = boost::bind(&monitor_widget::click_processed, this);
+            post_f f = boost::bind(fuck, callback);
+            post_service_(f);
+            btn_->setDisabled(true);
+        }
+
+        void click_processed()
+        {
+            btn_->setDisabled(false);
+        }
+
     private:
         QTextEdit *label_ = nullptr;
+        QPushButton *btn_ = nullptr;
         post_service_f post_service_;
     };
 
