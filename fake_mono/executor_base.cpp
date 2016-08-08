@@ -5,8 +5,8 @@
 executor_base::executor_base()
 {}
 
-functions_t const &mono_functions();
-functions_t const &executor_base::get_f()
+mono_wrapper::functions_t const &mono_functions();
+mono_wrapper::functions_t const &executor_base::get_f()
 {
     return ::mono_functions();
 }

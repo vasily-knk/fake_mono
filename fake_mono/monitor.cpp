@@ -2,7 +2,7 @@
 #include "monitor.h"
 #include "stats.h"
 
-#include "stl_helpers.h"
+#include "common/stl_helpers.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>

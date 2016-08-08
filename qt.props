@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <QT_DIR>D:\Tools\Qt\Qt5.7.0\5.7\msvc2013\</QT_DIR>
     <QtIncludeDir>$(QT_DIR)include\</QtIncludeDir>
     <QtLibDir>$(QT_DIR)lib\</QtLibDir>
   </PropertyGroup>
@@ -16,9 +15,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <BuildMacro Include="QT_DIR">
-      <Value>$(QT_DIR)</Value>
-    </BuildMacro>
     <BuildMacro Include="QtIncludeDir">
       <Value>$(QtIncludeDir)</Value>
     </BuildMacro>

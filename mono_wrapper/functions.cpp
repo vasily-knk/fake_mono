@@ -1,5 +1,9 @@
 #include "stdafx.h"
-#include "functions.h"
+#include "mono_wrapper/functions.h"
+
+
+namespace mono_wrapper
+{
 
 functions_t load_mono_functions_from_dll(HMODULE dll)
 {
@@ -224,3 +228,5 @@ functions_t load_mono_functions_from_dll(HMODULE dll)
     
     return result;
 }
+
+} // namespace mono_wrapper

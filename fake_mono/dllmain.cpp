@@ -1,13 +1,13 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
-#include "functions.h"
+#include "mono_wrapper/functions.h"
 
 namespace
 {
-    optional<functions_t> g_mono_functions;
+    optional<mono_wrapper::functions_t> g_mono_functions;
 }
 
-functions_t const &mono_functions()
+mono_wrapper::functions_t const &mono_functions()
 {
     if (!g_mono_functions)
         throw std::runtime_error("mono functions not loaded");
@@ -30,7 +30,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         auto real_dll_path = dll_path.parent_path() / "_mono.dll";
         
         HMODULE real_dll = LoadLibraryA(real_dll_path.string().c_str());
-        g_mono_functions = load_mono_functions_from_dll(real_dll);
+        g_mono_functions = mono_wrapper::load_mono_functions_from_dll(real_dll);
     }
     
     

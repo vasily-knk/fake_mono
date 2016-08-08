@@ -1,7 +1,7 @@
 #pragma once
 
 #include "executor.h"
-#include "functions.h"
+#include "mono_wrapper/functions.h"
 
 struct executor_base
     : executor
@@ -226,6 +226,6 @@ struct executor_base
     gint64 mono_gc_get_heap_size() override;
 
 protected:
-    functions_t const &get_f();
+    mono_wrapper::functions_t const &get_f();
 };
 

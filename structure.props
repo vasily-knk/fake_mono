@@ -5,6 +5,7 @@
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\out\bin\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)..\out\obj\$(Configuration)_$(Platform)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)_Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

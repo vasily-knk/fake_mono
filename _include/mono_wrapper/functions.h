@@ -2,6 +2,9 @@
 
 #include "types.h"
 
+namespace mono_wrapper
+{
+
 struct functions_t
 {
     typedef void(__cdecl *mono_thread_suspend_all_other_threads_t)();
@@ -440,3 +443,5 @@ struct functions_t
 };
 
 functions_t load_mono_functions_from_dll(HMODULE dll);
+
+} // namespace mono_wrapper

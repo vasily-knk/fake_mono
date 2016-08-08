@@ -1,5 +1,12 @@
 #pragma once
 
+namespace mono_wrapper
+{
+
+namespace types
+{
+
+
 typedef signed long SInt32;
 typedef unsigned long UInt32;
 typedef signed short SInt16;
@@ -101,3 +108,10 @@ typedef MonoBreakPolicy (*MonoBreakPolicyFunc) (MonoMethod *method);
 typedef void* (*MonoDlFallbackLoad) (const char *name, int flags, char **err, void *user_data);
 typedef void* (*MonoDlFallbackSymbol) (void *handle, const char *name, char **err, void *user_data);
 typedef void* (*MonoDlFallbackClose) (void *handle, void *user_data);
+
+} // namespace types
+} // namespace mono_wrapper
+
+using namespace mono_wrapper::types;
+
+

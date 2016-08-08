@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "executor_impl.h"
 #include "log.h"
-#include "stl_helpers.h"
+#include "common/stl_helpers.h"
 #include "monitor.h"
 
 
@@ -112,11 +112,11 @@ namespace get_assembly_names_detail
 {
     struct context_t
     {
-        context_t(functions_t const &functions)
+        context_t(mono_wrapper::functions_t const &functions)
             : functions(functions)
         {}
 
-        functions_t const &functions;
+        mono_wrapper::functions_t const &functions;
         vector<string> dst;
     };
     
@@ -147,12 +147,12 @@ namespace find_image_by_name_detail
 {
     struct context_t
     {
-        context_t(functions_t const &functions, char const *name)
+        context_t(mono_wrapper::functions_t const &functions, char const *name)
             : functions(functions)
             , name(name)
         {}
 
-        functions_t const &functions;
+        mono_wrapper::functions_t const &functions;
         char const *name;
         MonoImage *result = nullptr;
     };
