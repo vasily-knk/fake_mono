@@ -51,5 +51,11 @@
     <ClInclude Include="mono_wrapper\Array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mono_wrapper\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mono_wrapper\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

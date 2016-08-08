@@ -27,6 +27,12 @@
     <ClInclude Include="Array_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Array_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,6 +6,8 @@
 
 #include "mono_wrapper/Array.h"
 #include "mono_wrapper/String.h"
+#include "mono_wrapper/GameObject.h"
+#include "mono_wrapper/Transform.h"
 
 
 executor_ptr create_executor()
@@ -196,11 +198,15 @@ void executor_impl::go_impl(task_t const &callback)
 
     std::stringstream ss;
 
-    ss << mono_wrapper::wrap_Object(fptr, gameobject_type_object)->ToString()->to_utf8() << "\n\n\n";
+    ss << "Scene objects:\n\n";
     for (int32_t i = 0; i < len; ++i)
     {
         auto obj = arr->Get(i);
-        ss << obj->ToString()->to_utf8() << "\n";
+        auto game_object = mono_wrapper::wrap_GameObject(fptr, obj->get_mono_object());
+
+        auto transform = game_object->get_transform();
+        auto position = transform->get_position();
+        ss << "   " << game_object->get_name()->to_utf8() << "\n";
 
     }
 

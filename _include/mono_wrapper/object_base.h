@@ -43,9 +43,13 @@ public:
 
     MonoMethod *get_getter(char const *name) const
     {
-        MonoClass *klass = f_->mono_object_get_class(get_object());
-        MonoProperty *prop = f_->mono_class_get_property_from_name(klass, name);
-        return f_->mono_property_get_get_method(prop);
+        for (MonoClass *klass = get_class(); klass; klass = f_->mono_class_get_parent(klass))
+        {
+            if (MonoProperty *prop = f_->mono_class_get_property_from_name(klass, name))
+                return f_->mono_property_get_get_method(prop);
+        }
+
+        return nullptr;
     }
 
     MonoObject *invoke_method(MonoMethod *m, void *args[]) const

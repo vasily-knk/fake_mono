@@ -74,19 +74,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Array_impl.h" />
+    <ClInclude Include="GameObject_impl.h" />
     <ClInclude Include="Object_impl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="String_impl.h" />
+    <ClInclude Include="Transform_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Array_impl.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="GameObject_impl.cpp" />
     <ClCompile Include="Object_impl.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="String_impl.cpp" />
+    <ClCompile Include="Transform_impl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
