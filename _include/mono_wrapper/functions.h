@@ -442,6 +442,6 @@ struct functions_t
     mono_gc_get_heap_size_t mono_gc_get_heap_size = nullptr;
 };
 
-functions_t load_mono_functions_from_dll(HMODULE dll);
+    functions_t load_mono_functions_from_dll(HMODULE dll);
 
 } // namespace mono_wrapper

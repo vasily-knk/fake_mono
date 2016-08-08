@@ -16,6 +16,10 @@
     <ClInclude Include="common\stl.h" />
     <ClInclude Include="common\stl_helpers.h" />
     <ClInclude Include="mono_wrapper\functions.h" />
+    <ClInclude Include="mono_wrapper\class_desc.h" />
+    <ClInclude Include="mono_wrapper\mono_wrapper_fwd.h" />
+    <ClInclude Include="mono_wrapper\object.h" />
+    <ClInclude Include="mono_wrapper\object_base.h" />
     <ClInclude Include="mono_wrapper\types.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

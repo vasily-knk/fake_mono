@@ -33,5 +33,17 @@
     <ClInclude Include="common\stl_helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mono_wrapper\object_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mono_wrapper\mono_wrapper_fwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mono_wrapper\class_desc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mono_wrapper\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
