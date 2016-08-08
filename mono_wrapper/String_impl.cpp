@@ -10,13 +10,13 @@ String_impl::String_impl(functions_cptr f, MonoObject *p)
 
 int32_t String_impl::get_Length() 
 {
-    static MonoMethod *m = base().get_getter("Length");
+    MonoMethod *m = base().get_getter("Length");
     return base().unbox<bool>(base().invoke_method(m, nullptr));
 }
 
 String_ptr String_impl::ToUpper() 
 {
-    static MonoMethod *m = base().get_method("ToUpper", 0);
+    MonoMethod *m = base().get_method("ToUpper", 0);
     return wrap_String(base().get_f(), base().invoke_method(m, nullptr));
 }
 
@@ -28,7 +28,8 @@ char const *String_impl::to_utf8() const
 
 String_ptr  String_impl::ToString       ()               { return super_.ToString()       ; }
 bool        String_impl::Equals         (Object_ptr obj) { return super_.Equals(obj)      ; }
-MonoObject *String_impl::get_mono_object()        const  { return super_.get_mono_object(); }
+MonoObject *String_impl::get_mono_object()         const { return super_.get_mono_object(); }
+char const *String_impl::get_class_name ()         const { return super_.get_class_name();  }
 
 object_base const &String_impl::base() const { return super_.base(); }
 

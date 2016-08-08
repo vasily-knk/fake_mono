@@ -15,13 +15,13 @@ Object_impl::Object_impl(functions_cptr f, MonoObject *p)
     
 String_ptr Object_impl::ToString() 
 {
-    static MonoMethod *m = base().get_method("ToString", 0);
+    MonoMethod *m = base().get_method("ToString", 0);
     return wrap_String(base().get_f(), base().invoke_method(m, nullptr));
 }
     
 bool Object_impl::Equals(Object_ptr obj) 
 {
-    static MonoMethod *m = base().get_method("Equals", 1);
+    MonoMethod *m = base().get_method("Equals", 1);
 
     void *args[] = { obj->get_mono_object() };
     return base().unbox<bool>(base().invoke_method(m, args));
@@ -30,6 +30,11 @@ bool Object_impl::Equals(Object_ptr obj)
 MonoObject *Object_impl::get_mono_object() const 
 {
     return base().get_object();
+}
+
+char const *Object_impl::get_class_name() const 
+{
+    return base().get_f()->mono_class_get_name(base_.get_class());
 }
 
 object_base const &Object_impl::base() const

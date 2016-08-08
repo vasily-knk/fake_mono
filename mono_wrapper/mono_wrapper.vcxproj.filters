@@ -24,6 +24,9 @@
     <ClInclude Include="String_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Array_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="String_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Array_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,6 +16,7 @@ struct Object_impl
     bool Equals(Object_ptr obj) override;
     
     MonoObject *get_mono_object() const override;
+    char const *get_class_name() const override;
 
 public:
     object_base const &base() const;

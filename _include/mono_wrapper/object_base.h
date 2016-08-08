@@ -18,22 +18,27 @@ struct object_base
         f_->mono_gchandle_free(handle_);
     }
 
-    class_desc_t get_class()
-    {
-        MonoClass *p = f_->mono_object_get_class(get_object());
-        return class_desc_t(f_, p);
-    }
 
 public:
     MonoObject *get_object() const
     {
         return f_->mono_gchandle_get_target(handle_);
     }
+    
+    MonoClass *get_class() const
+    {
+        return f_->mono_object_get_class(get_object());
+    }
 
     MonoMethod *get_method(char const *name, int params_count) const
     {
-        MonoClass *klass = f_->mono_object_get_class(get_object());
-        return f_->mono_class_get_method_from_name(klass, name, params_count);
+        for (MonoClass *klass = get_class(); klass; klass = f_->mono_class_get_parent(klass))
+        {
+            if (MonoMethod *method = f_->mono_class_get_method_from_name(klass, name, params_count))
+                return method;
+        }
+
+        return nullptr;
     }
 
     MonoMethod *get_getter(char const *name) const

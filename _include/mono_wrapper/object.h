@@ -14,6 +14,7 @@ struct Object
     virtual bool Equals(Object_ptr obj) = 0;
 
     virtual MonoObject *get_mono_object() const = 0;
+    virtual char const *get_class_name() const = 0;
 };
 
 Object_ptr wrap_Object(functions_cptr f, MonoObject *p);

@@ -94,6 +94,7 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
   <ItemGroup>
     <ClInclude Include="executor.h" />
     <ClInclude Include="executor_base.h" />
+    <ClInclude Include="executor_control.h" />
     <ClInclude Include="executor_impl.h" />
     <ClInclude Include="function_defs.h" />
     <ClInclude Include="log.h" />

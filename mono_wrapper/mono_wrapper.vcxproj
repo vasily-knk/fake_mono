@@ -73,11 +73,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Array_impl.h" />
     <ClInclude Include="Object_impl.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="String_impl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Array_impl.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="Object_impl.cpp" />
     <ClCompile Include="stdafx.cpp">

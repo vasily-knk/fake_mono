@@ -4,6 +4,8 @@
 
 #include "common/stl_helpers.h"
 
+#include "executor_control.h"
+
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
@@ -37,8 +39,8 @@ namespace
     struct monitor_widget
         : QWidget
     {
-        monitor_widget(post_service_f const &post_service)
-            : post_service_(post_service)
+        monitor_widget(executor_control *control)
+            : control_(control)
         {
             auto layout = new QVBoxLayout(this);
 
@@ -73,9 +75,8 @@ namespace
 
         void btn_clicked()
         {
-            post_f callback = boost::bind(&monitor_widget::click_processed, this);
-            post_f f = boost::bind(fuck, callback);
-            post_service_(f);
+            task_t callback = boost::bind(&monitor_widget::click_processed, this);
+            control_->go(callback);
             btn_->setDisabled(true);
         }
 
@@ -87,7 +88,7 @@ namespace
     private:
         QTextEdit *label_ = nullptr;
         QPushButton *btn_ = nullptr;
-        post_service_f post_service_;
+        executor_control *control_;
     };
 
     std::unique_ptr<monitor_widget> g_monitor;
@@ -99,12 +100,12 @@ namespace
 
 }
 
-void run(post_service_f const &post_service)
+void run(executor_control *control)
 {
     int argv = 0;
     QApplication app(argv, nullptr);
 
-    g_monitor = std::make_unique<monitor_widget>(post_service);
+    g_monitor = std::make_unique<monitor_widget>(control);
     g_monitor->show();
     app.exec();
 }

@@ -15,6 +15,7 @@
     <ClInclude Include="common\qt.h" />
     <ClInclude Include="common\stl.h" />
     <ClInclude Include="common\stl_helpers.h" />
+    <ClInclude Include="mono_wrapper\Array.h" />
     <ClInclude Include="mono_wrapper\functions.h" />
     <ClInclude Include="mono_wrapper\class_desc.h" />
     <ClInclude Include="mono_wrapper\mono_wrapper_fwd.h" />
