@@ -14,6 +14,7 @@ struct executor_impl
     ~executor_impl();
     
     MonoObject* mono_runtime_invoke(MonoMethod* method, void* obj, void** params, MonoObject** exc) override;
+    void mono_set_dirs(const char* assembly_dir, const char* config_dir) override;
 
 private:
     void go(task_t const &callback) override;
@@ -37,5 +38,9 @@ private:
 
 private:
     vector<std::function<void()>> tasks_;
-    boost::mutex tasks_mutex_;
+    mutable boost::mutex tasks_mutex_;
+
+private:
+    fs::path assembly_dir_;
+    mutable boost::mutex assembly_dir_mutex_;
 };

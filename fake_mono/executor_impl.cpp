@@ -152,81 +152,89 @@ MonoObject *executor_impl::get_type_by_name(char const *name)
     return result;
 }
 
-void executor_impl::go_impl(task_t const &callback) 
+void executor_impl::go_impl(task_t const &callback)
 {
-    auto get_class_name = [this](MonoObject *obj) -> char const *
-    {
-        if (!obj)
-            return nullptr;
-        
-        MonoClass *klass = get_f().mono_object_get_class(obj);
-        return get_f().mono_class_get_name(klass);
-    };
-
-
-    auto get_property = [this](MonoObject *obj, char const *name) -> MonoObject *
-    {
-        MonoClass *klass = get_f().mono_object_get_class(obj);
-        MonoProperty *prop = get_f().mono_class_get_property_from_name(klass, name);
-        MonoMethod *getter = get_f().mono_property_get_get_method(prop);
-
-        return get_f().mono_runtime_invoke(getter, obj, nullptr, nullptr);
-    };
-
-    MonoDomain *domain = get_f().mono_domain_get();
-    
-    MonoImage *unity_engine = find_image_by_name("UnityEngine");
-    MonoClass *gameobject_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "GameObject");
-    MonoType *gameobject_type = get_f().mono_class_get_type(gameobject_class);
-    MonoObject *gameobject_type_object = get_f().mono_type_get_object(domain, gameobject_type);
-
-
-    
-    MonoClass *unity_object_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "Object");
-    MonoMethod *find_objects_of_type = get_f().mono_class_get_method_from_name(unity_object_class, "FindObjectsOfType", 1);
-    char const *full_name = get_f().mono_method_full_name(find_objects_of_type, true);
-
-    void *args[] = {gameobject_type_object};
-
-    MonoObject *result = get_f().mono_runtime_invoke(find_objects_of_type, nullptr, args, nullptr);
-
     auto fptr = make_shared<mono_wrapper::functions_t>(get_f());
+    MonoDomain *domain = get_f().mono_domain_get();
 
-    auto arr = mono_wrapper::wrap_Array(fptr, result);
-
-    auto len = arr->get_Length();
-
-    std::stringstream ss;
-
-    ss << "Scene objects:\n\n";
-    for (int32_t i = 0; i < len; ++i)
+    fs::path assembly_path;
     {
-        auto obj = arr->Get(i);
-        auto game_object = mono_wrapper::wrap_GameObject(fptr, obj->get_mono_object());
-
-        auto transform = game_object->get_transform();
-        auto position = transform->get_position();
-        ss << "   " << game_object->get_name()->to_utf8() << "\n";
-
+        boost::mutex::scoped_lock l(assembly_dir_mutex_);
+        assembly_path = assembly_dir_ / "ClassLibrary1.dll";
     }
 
-    monitor::print(ss.str());
-    
-//     {
-//         MonoClass *klass = fptr->mono_object_get_class(result);
-//         gpointer iter = nullptr;
-//         
-// 
-//         while (MonoMethod *m = fptr->mono_class_get_methods(klass, &iter))
-//         {
-//             char const * mn = fptr->mono_method_full_name(m, true);
-//             ss << mn << "\n";
-//         }
-// 
-//     }
+
+    int status = 0;
+    MonoAssembly *assembly = get_f().mono_assembly_open(assembly_path.string().c_str(), &status);
+    MonoImage *image = get_f().mono_assembly_get_image(assembly);
+    char const *name = get_f().mono_image_get_name(image);
+
+    MonoClass *klass = get_f().mono_class_from_name(image, "ClassLibrary1", "Class1");
+    MonoObject *obj = get_f().mono_object_new(domain, klass);
+
+    MonoMethod *method = get_f().mono_class_get_method_from_name(klass, "GetObjects", 0);
+    MonoObject *result = get_f().mono_runtime_invoke(method, obj, nullptr, nullptr);
+
+    auto str = mono_wrapper::wrap_String(fptr, result);
+    monitor::print(str->to_utf8());
     
     monitor::post(callback);
+
+    //mono_g
 }
+
+void executor_impl::mono_set_dirs(const char* assembly_dir, const char* config_dir) 
+{
+    executor_base::mono_set_dirs(assembly_dir, config_dir);
+    
+    {
+        boost::mutex::scoped_lock l(assembly_dir_mutex_);
+        assembly_dir_ = assembly_dir;
+    }
+}
+
+// void executor_impl::go_impl(task_t const &callback) 
+// {
+//     auto get_class_name = [this](MonoObject *obj) -> char const *
+//     {
+//         if (!obj)
+//             return nullptr;
+//         
+//         MonoClass *klass = get_f().mono_object_get_class(obj);
+//         return get_f().mono_class_get_name(klass);
+//     };
+// 
+// 
+//     auto get_property = [this](MonoObject *obj, char const *name) -> MonoObject *
+//     {
+//         MonoClass *klass = get_f().mono_object_get_class(obj);
+//         MonoProperty *prop = get_f().mono_class_get_property_from_name(klass, name);
+//         MonoMethod *getter = get_f().mono_property_get_get_method(prop);
+// 
+//         return get_f().mono_runtime_invoke(getter, obj, nullptr, nullptr);
+//     };
+// 
+//     MonoDomain *domain = get_f().mono_domain_get();
+//     
+//     MonoImage *unity_engine = find_image_by_name("UnityEngine");
+//     MonoClass *gameobject_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "GameObject");
+//     MonoType *gameobject_type = get_f().mono_class_get_type(gameobject_class);
+//     MonoObject *gameobject_type_object = get_f().mono_type_get_object(domain, gameobject_type);
+// 
+// 
+//     
+//     MonoClass *unity_object_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "Object");
+//     MonoMethod *find_objects_of_type = get_f().mono_class_get_method_from_name(unity_object_class, "FindObjectsOfType", 1);
+//     char const *full_name = get_f().mono_method_full_name(find_objects_of_type, true);
+// 
+//     void *args[] = {gameobject_type_object};
+// 
+//     MonoObject *result = get_f().mono_runtime_invoke(find_objects_of_type, nullptr, args, nullptr);
+// 
+//     auto fptr = make_shared<mono_wrapper::functions_t>(get_f());
+// 
+
+// }
 
 void executor_impl::go(task_t const &callback) 
 {
