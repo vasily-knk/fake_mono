@@ -173,14 +173,25 @@ void executor_impl::go_impl(task_t const &callback)
     MonoObject *obj = get_f().mono_object_new(domain, klass);
 
     MonoMethod *method = get_f().mono_class_get_method_from_name(klass, "GetObjects", 0);
-    MonoObject *result = get_f().mono_runtime_invoke(method, obj, nullptr, nullptr);
+                                
+    MonoObject *ex = nullptr;
+    MonoObject *result = get_f().mono_runtime_invoke(method, obj, nullptr, &ex);
 
-    auto str = mono_wrapper::wrap_String(fptr, result);
-    monitor::print(str->to_utf8());
+    if (ex)
+    {
+        auto exw = mono_wrapper::wrap_Object(fptr, ex);
+        char const *error = exw->ToString()->to_utf8();
+        monitor::print(error);
+    }
+    else
+    {
+        auto str = mono_wrapper::wrap_String(fptr, result);
+        monitor::print(str->to_utf8());
+    }
+
+
     
     monitor::post(callback);
-
-    //mono_g
 }
 
 void executor_impl::mono_set_dirs(const char* assembly_dir, const char* config_dir) 
