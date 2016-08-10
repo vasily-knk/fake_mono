@@ -165,17 +165,15 @@ void executor_impl::go_impl(task_t const &callback)
 
 
     int status = 0;
-    MonoAssembly *assembly = get_f().mono_assembly_open(assembly_path.string().c_str(), &status);
-    MonoImage *image = get_f().mono_assembly_get_image(assembly);
-    char const *name = get_f().mono_image_get_name(image);
+    MonoAssembly *assembly = fptr->mono_assembly_open(assembly_path.string().c_str(), &status);
+    MonoImage *image = fptr->mono_assembly_get_image(assembly);
+    char const *name = fptr->mono_image_get_name(image);
 
-    MonoClass *klass = get_f().mono_class_from_name(image, "ClassLibrary1", "Class1");
-    MonoObject *obj = get_f().mono_object_new(domain, klass);
-
-    MonoMethod *method = get_f().mono_class_get_method_from_name(klass, "GetObjects", 0);
+    MonoClass *klass = fptr->mono_class_from_name(image, "ClassLibrary1", "Class1");
+    MonoMethod *method = fptr->mono_class_get_method_from_name(klass, "GetObjects", 0);
                                 
     MonoObject *ex = nullptr;
-    MonoObject *result = get_f().mono_runtime_invoke(method, obj, nullptr, &ex);
+    MonoObject *result = fptr->mono_runtime_invoke(method, nullptr, nullptr, &ex);
 
     if (ex)
     {
@@ -189,8 +187,6 @@ void executor_impl::go_impl(task_t const &callback)
         monitor::print(str->to_utf8());
     }
 
-
-    
     monitor::post(callback);
 }
 

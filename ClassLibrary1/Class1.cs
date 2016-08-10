@@ -6,7 +6,7 @@ namespace ClassLibrary1
 {
     public class Class1
     {
-        String GetObjects()
+        static String GetObjects()
         {
             var objects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
