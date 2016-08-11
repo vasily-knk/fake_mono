@@ -12,15 +12,18 @@ namespace ClassLibrary1
 
             var builder = new StringBuilder();
 
-            foreach(var o in objects)
+            foreach (GameObject obj in objects)
             {
-                Vector3 pos = o.transform.position;
-                
-                builder.Append(o.name)
-                       .Append(": ")
-                       .Append(pos)
-                       .Append("\n");
+                builder.Append(obj.name)
+                    .Append(":\n");
+
+                var comps = obj.GetComponents<Component>();
+                foreach (Component comp in comps)
+                {
+                    builder.Append(String.Format("    {0}\n", comp.ToString()));
+                }
             }
+
 
             return builder.ToString();
         }

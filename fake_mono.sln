@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fake_mono", "fake_mono\fake_mono.vcxproj", "{78B2BFB8-BB9A-43F2-A447-2C1902DAA29E}"
 EndProject
@@ -78,6 +78,7 @@ Global
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Debug|Win32.Build.0 = Debug|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Any CPU.Build.0 = Release|Any CPU
