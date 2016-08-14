@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "monitor.h"
 #include "stats.h"
+#include "log.h"
 
 #include "common/stl_helpers.h"
 
@@ -44,7 +45,7 @@ namespace
         {
             auto layout = new QVBoxLayout(this);
 
-            btn_ = new QPushButton("Click me!");
+            btn_ = new QPushButton("Init watcher");
 
             connect(btn_, &QPushButton::clicked, boost::bind(&monitor_widget::btn_clicked, this));
 
@@ -75,14 +76,8 @@ namespace
 
         void btn_clicked()
         {
-            task_t callback = boost::bind(&monitor_widget::click_processed, this);
-            control_->go(callback);
+            control_->init_watcher();
             btn_->setDisabled(true);
-        }
-
-        void click_processed()
-        {
-            btn_->setDisabled(false);
         }
 
     private:
@@ -118,6 +113,7 @@ void post(post_f const &f)
 
 void print(string const &str)
 {
+    log_stream() << str << std::flush;
     post(std::bind(print_impl, str));
 }
 

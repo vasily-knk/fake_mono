@@ -80,3 +80,12 @@ void log_function(char const *name, Args&&... args)
     }
 }
 
+struct verify_error
+    : std::runtime_error
+{
+    verify_error(char const* msg)
+        : std::runtime_error(msg)
+    {}
+};
+
+#define Verify(cond) { if (!(cond)) throw verify_error(#cond); }

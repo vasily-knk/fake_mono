@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
+#include <atomic>
 
 using std::shared_ptr;
 using std::make_shared;

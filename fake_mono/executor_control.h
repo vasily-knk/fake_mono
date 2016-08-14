@@ -6,6 +6,6 @@ struct executor_control
 {
     virtual ~executor_control() {}
 
-    virtual void go(task_t const &callback) = 0;
+    virtual void init_watcher() = 0;
 };
 

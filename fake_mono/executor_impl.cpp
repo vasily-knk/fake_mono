@@ -10,6 +10,9 @@
 #include "mono_wrapper/Transform.h"
 
 
+std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
+
+
 executor_ptr create_executor()
 {
     return make_shared<executor_impl>();
@@ -17,28 +20,72 @@ executor_ptr create_executor()
 
 executor_impl::executor_impl()
 {
-    auto worker = boost::bind(&monitor::run, this);
-    monitor_thread_ = boost::thread(worker);
+    //monitor_thread_ = boost::thread(boost::bind(&monitor::run, this));
+}
+
+void executor_impl::init(MonoDomain *domain)
+{
+    main_thread_id_ = std::make_shared<boost::thread::id>(boost::this_thread::get_id());
+}
+
+MonoThread* executor_impl::mono_thread_attach(MonoDomain* domain) 
+{
+    return executor_base::mono_thread_attach(domain);
+}
+
+MonoDomain* executor_impl::mono_jit_init(const char* file)
+{
+    auto domain = executor_base::mono_jit_init(file);
+    init(domain);
+    return domain;
+}
+
+MonoDomain* executor_impl::mono_jit_init_version(const char* file, const char* runtime_version)
+{
+    auto domain = executor_base::mono_jit_init_version(file, runtime_version);
+    init(domain);
+    return domain;
+}
+
+void executor_impl::mono_add_internal_call(const char* name, gconstpointer method)
+{
+    log_stream() << "Internal method: " << name << std::endl;
+    executor_base::mono_add_internal_call(name, method);
 }
 
 executor_impl::~executor_impl()
 {
-    monitor_thread_.join();
 }
 
 MonoObject* executor_impl::mono_runtime_invoke(MonoMethod* method, void* p_obj, void** params, MonoObject** exc) 
 {
-    char const *method_name = get_f().mono_method_get_name(method);
-    char const *method_full_name = get_f().mono_method_full_name(method, true);
-    if (!strcmp(method_name, "FixedUpdate"))
+    if (pending_watcher_creation_.load())
     {
-        MonoObject *obj = static_cast<MonoObject *>(p_obj);
-        MonoClass *klass = get_f().mono_object_get_class(obj);
-        char const *class_name = get_f().mono_class_get_name(klass);
+        auto thread_id = boost::this_thread::get_id();
+        if (thread_id == *main_thread_id_)
+        {
+            static std::array<char const *, 3> method_names = 
+            {
+                "FixedUpdate",
+                "Update",
+                "Start",
+            };
+            
+            char const *method_name = get_f().mono_method_get_name(method);
+            auto it = boost::find_if(method_names, [method_name](char const *n)
+            {
+                return !strcmp(n, method_name);
+            });
 
-        process_fixed_update();
+            if (it != method_names.end())
+            {
+                bool expected = true;
+                if (pending_watcher_creation_.compare_exchange_strong(expected, false))
+                    create_watcher();
+            }
+        }
     }
-    
+
     return executor_base::mono_runtime_invoke(method, p_obj, params, exc);
 }
 
@@ -116,28 +163,6 @@ MonoImage *executor_impl::find_image_by_name(char const *name)
     return context.result;
 }
 
- void executor_impl::process_fixed_update()
- {
-     boost::mutex::scoped_lock lock(tasks_mutex_);
-     for (auto const &task : tasks_)
-         task();
-
-     tasks_.clear();
- }
-
-void executor_impl::post(std::function<void()> const &task)
-{
-     boost::mutex::scoped_lock lock(tasks_mutex_);
-     tasks_.push_back(task);
-}
-
-
-// void executor_impl::process_fixed_update()
-// {
-
-// 
-// }
-
 MonoObject *executor_impl::get_type_by_name(char const *name)
 {
     MonoImage *core = find_image_by_name("mscorlib");
@@ -152,43 +177,6 @@ MonoObject *executor_impl::get_type_by_name(char const *name)
     return result;
 }
 
-void executor_impl::go_impl(task_t const &callback)
-{
-    auto fptr = make_shared<mono_wrapper::functions_t>(get_f());
-    MonoDomain *domain = get_f().mono_domain_get();
-
-    fs::path assembly_path;
-    {
-        boost::mutex::scoped_lock l(assembly_dir_mutex_);
-        assembly_path = assembly_dir_ / "ClassLibrary1.dll";
-    }
-
-
-    int status = 0;
-    MonoAssembly *assembly = fptr->mono_assembly_open(assembly_path.string().c_str(), &status);
-    MonoImage *image = fptr->mono_assembly_get_image(assembly);
-    char const *name = fptr->mono_image_get_name(image);
-
-    MonoClass *klass = fptr->mono_class_from_name(image, "ClassLibrary1", "Class1");
-    MonoMethod *method = fptr->mono_class_get_method_from_name(klass, "GetObjects", 0);
-                                
-    MonoObject *ex = nullptr;
-    MonoObject *result = fptr->mono_runtime_invoke(method, nullptr, nullptr, &ex);
-
-    if (ex)
-    {
-        auto exw = mono_wrapper::wrap_Object(fptr, ex);
-        char const *error = exw->ToString()->to_utf8();
-        monitor::print(error);
-    }
-    else
-    {
-        auto str = mono_wrapper::wrap_String(fptr, result);
-        monitor::print(str->to_utf8());
-    }
-
-    monitor::post(callback);
-}
 
 void executor_impl::mono_set_dirs(const char* assembly_dir, const char* config_dir) 
 {
@@ -200,52 +188,75 @@ void executor_impl::mono_set_dirs(const char* assembly_dir, const char* config_d
     }
 }
 
-// void executor_impl::go_impl(task_t const &callback) 
-// {
-//     auto get_class_name = [this](MonoObject *obj) -> char const *
-//     {
-//         if (!obj)
-//             return nullptr;
-//         
-//         MonoClass *klass = get_f().mono_object_get_class(obj);
-//         return get_f().mono_class_get_name(klass);
-//     };
-// 
-// 
-//     auto get_property = [this](MonoObject *obj, char const *name) -> MonoObject *
-//     {
-//         MonoClass *klass = get_f().mono_object_get_class(obj);
-//         MonoProperty *prop = get_f().mono_class_get_property_from_name(klass, name);
-//         MonoMethod *getter = get_f().mono_property_get_get_method(prop);
-// 
-//         return get_f().mono_runtime_invoke(getter, obj, nullptr, nullptr);
-//     };
-// 
-//     MonoDomain *domain = get_f().mono_domain_get();
-//     
-//     MonoImage *unity_engine = find_image_by_name("UnityEngine");
-//     MonoClass *gameobject_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "GameObject");
-//     MonoType *gameobject_type = get_f().mono_class_get_type(gameobject_class);
-//     MonoObject *gameobject_type_object = get_f().mono_type_get_object(domain, gameobject_type);
-// 
-// 
-//     
-//     MonoClass *unity_object_class = get_f().mono_class_from_name(unity_engine, "UnityEngine", "Object");
-//     MonoMethod *find_objects_of_type = get_f().mono_class_get_method_from_name(unity_object_class, "FindObjectsOfType", 1);
-//     char const *full_name = get_f().mono_method_full_name(find_objects_of_type, true);
-// 
-//     void *args[] = {gameobject_type_object};
-// 
-//     MonoObject *result = get_f().mono_runtime_invoke(find_objects_of_type, nullptr, args, nullptr);
-// 
-//     auto fptr = make_shared<mono_wrapper::functions_t>(get_f());
-// 
-
-// }
-
-void executor_impl::go(task_t const &callback) 
+void executor_impl::create_watcher()
 {
-    auto task = boost::bind(&executor_impl::go_impl, this, callback);
+    Verify(boost::this_thread::get_id() == *main_thread_id_);
+
+    watcher_data_t const &watcher_data = get_watcher_data();
+    MonoObject *game_object = get_f().mono_runtime_invoke(watcher_data.create_method, nullptr, nullptr, nullptr);
+    Verify(game_object);
+
+    Verify(watchers_to_executors_.count(game_object) == 0);
     
-    post(task);
+    std::weak_ptr<executor_impl> weak_this = shared_from_this();
+    watchers_to_executors_.emplace(game_object, weak_this);
+}
+
+void executor_impl::unregister_watcher(MonoObject *game_object)
+{
+    auto it = watchers_to_executors_.find(game_object);
+    Verify(it != watchers_to_executors_.end());
+
+    auto self = it->second.lock();
+    watchers_to_executors_.erase(it);
+
+    if (self)
+        self->pending_watcher_creation_.store(true);
+}
+
+auto executor_impl::get_watcher_data() const -> watcher_data_t const &
+{
+    Verify(boost::this_thread::get_id() == *main_thread_id_);
+    
+    if (!watcher_data_)
+        init_watcher_data();
+
+    return *watcher_data_;
+}
+
+void executor_impl::init_watcher_data() const 
+{
+    string lib_name = "ClassLibrary1";
+    
+    Verify(boost::this_thread::get_id() == *main_thread_id_);
+
+    auto fptr = make_shared<mono_wrapper::functions_t>(get_f());
+    fs::path assembly_path;
+    {
+        boost::mutex::scoped_lock l(assembly_dir_mutex_);
+        assembly_path = assembly_dir_ / fs::path(lib_name + ".dll");
+    }
+
+    int status = 0;
+    MonoAssembly *assembly = fptr->mono_assembly_open(assembly_path.string().c_str(), &status);
+    MonoImage *image = fptr->mono_assembly_get_image(assembly);
+    char const *name = fptr->mono_image_get_name(image);
+
+    fptr->mono_add_internal_call((lib_name + ".Class1::Print").c_str(), &internal_print);
+    fptr->mono_add_internal_call((lib_name + ".MyWatcher::OnObjectDestroying").c_str(), &unregister_watcher);
+
+    MonoClass *klass = fptr->mono_class_from_name(image, lib_name.c_str(), "MyWatcher");
+    MonoMethod *create_method = fptr->mono_class_get_method_from_name(klass, "CreateObject", 0);
+
+    watcher_data_ = watcher_data_t();
+    watcher_data_->assembly = assembly;
+    watcher_data_->image = image;
+    watcher_data_->create_method = create_method;
+}
+
+void executor_impl::internal_print(MonoString *str)
+{
+    char const *cstr = get_f().mono_string_to_utf8(str);
+    OutputDebugStringA(cstr);
+    log_stream() << cstr << std::flush;
 }
