@@ -226,6 +226,6 @@ struct executor_base
     gint64 mono_gc_get_heap_size() override;
 
 protected:
-    static mono_wrapper::functions_t const &get_f();
+    static mono_wrapper::functions_cptr get_f();
 };
 

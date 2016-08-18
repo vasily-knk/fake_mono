@@ -1,7 +1,5 @@
 #pragma once
 
-#include "mono_wrapper/types.h"
-
 extern "C"
 {
     void mono_thread_suspend_all_other_threads();

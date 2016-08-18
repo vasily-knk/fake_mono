@@ -6,7 +6,7 @@ with open('data.json') as f:
     
 
 def open_file(name):
-    return open(os.path.join('../fake_mono', name), 'wt')
+    return open(os.path.join('../', name), 'wt')
 
 
 def arg2str(arg):
@@ -22,8 +22,7 @@ def list_args(args):
     return ', '.join(argslist)
 
 
-
-with open_file('fake_mono.def') as out:
+with open_file('fake_mono/fake_mono.def') as out:
     out.write('LIBRARY "fake_mono"\n'
               'EXPORTS\n')
 
@@ -31,10 +30,14 @@ with open_file('fake_mono.def') as out:
         out.write('   {}\n'.format(func['name']))
 
 
-with open_file('functions.h') as out:
+with open_file('_include/mono_wrapper/functions.h') as out:
     out.write('#pragma once\n'
               '\n'
-              '#include "types.h"\n'
+              '#include "mono_wrapper/types.h"\n'
+              '#include "mono_wrapper/mono_wrapper_fwd.h"\n'
+              '\n'
+              'namespace mono_wrapper\n'
+              '{\n'
               '\n'
               'struct functions_t\n'
               '{\n')
@@ -53,12 +56,17 @@ with open_file('functions.h') as out:
 
     out.write('};\n'
               '\n'
-              'functions_t load_mono_functions_from_dll(HMODULE dll);\n')
+              'functions_t load_mono_functions_from_dll(HMODULE dll);\n'
+              '\n'
+              '} // namespace mono_wrapper\n')
 
 
-with open_file('functions.cpp') as out:
+with open_file('mono_wrapper/functions.cpp') as out:
     out.write('#include "stdafx.h"\n'
-              '#include "functions.h"\n'
+              '#include "mono_wrapper/functions.h"\n'
+              '\n'
+              'namespace mono_wrapper\n'
+              '{\n'
               '\n')
 
     out.write('functions_t load_mono_functions_from_dll(HMODULE dll)\n'
@@ -73,9 +81,11 @@ with open_file('functions.cpp') as out:
 
     out.write('    \n'
               '    return result;\n'
-              '}\n')
+              '}\n'
+              '\n'
+              '} // namespace mono_wrapper')
 
-with open_file('fake_mono.cpp') as out:
+with open_file('fake_mono/fake_mono.cpp') as out:
     out.write('#include "stdafx.h"\n'
               '#include "executor.h"\n'
               '#include "function_defs.h"\n'
@@ -100,10 +110,10 @@ with open_file('fake_mono.cpp') as out:
         out.write('}\n\n')
 
 
-with open_file('executor.h') as out:
+with open_file('fake_mono/executor.h') as out:
     out.write('#pragma once\n'
               '\n'
-              '#include "types.h"\n'
+              '#include "mono_wrapper/types.h"\n'
               '\n')
 
     out.write('struct executor\n'
@@ -125,11 +135,11 @@ with open_file('executor.h') as out:
               '\n'
               'executor_ptr create_executor();\n')
 
-with open_file('executor_base.h') as out:
+with open_file('fake_mono/executor_base.h') as out:
     out.write('#pragma once\n'
               '\n'
               '#include "executor.h"\n'
-              '#include "functions.h"\n'
+              '#include "mono_wrapper/functions.h"\n'
               '\n')
 
     out.write('struct executor_base\n'
@@ -147,12 +157,12 @@ with open_file('executor_base.h') as out:
 
     out.write('\n'
               'protected:\n'
-              '    functions_t const &get_f();\n'
+              '    static mono_wrapper::functions_cptr get_f();\n'
               '};\n'
               '\n')
 
 
-with open_file('executor_base.cpp') as out:
+with open_file('fake_mono/executor_base.cpp') as out:
     out.write('#include "stdafx.h"\n'
               '#include "executor_base.h"\n'
               '#include "log.h"\n'
@@ -162,8 +172,8 @@ with open_file('executor_base.cpp') as out:
               '{}\n'
               '\n')
 
-    out.write('functions_t const &mono_functions();\n'
-              'functions_t const &executor_base::get_f()\n'
+    out.write('mono_wrapper::functions_cptr mono_functions();\n'
+              'mono_wrapper::functions_cptr executor_base::get_f()\n'
               '{\n'
               '    return ::mono_functions();\n'
               '}\n'
@@ -179,11 +189,11 @@ with open_file('executor_base.cpp') as out:
         out.write('{} executor_base::{}({})\n'.format(ret, name, args))
         out.write('{\n')
         out.write('    log_function({});\n'.format(', '.join(log_args_list)))
-        out.write('    return get_f().{}({});\n'.format(name, arg_names))
+        out.write('    return get_f()->{}({});\n'.format(name, arg_names))
         out.write('}\n'
                   '\n')
 
-with open_file('function_defs.h') as out:
+with open_file('fake_mono/function_defs.h') as out:
     out.write('#pragma once\n'
               '\n'
               'extern "C"\n'

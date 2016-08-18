@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "mono_wrapper/functions.h"
 
-
 namespace mono_wrapper
 {
 
