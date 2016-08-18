@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mono_wrapper_fwd.h"
 #include "types.h"
 
 namespace mono_wrapper

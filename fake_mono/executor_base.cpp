@@ -5,10 +5,11 @@
 executor_base::executor_base()
 {}
 
-mono_wrapper::functions_t const &mono_functions();
+mono_wrapper::functions_cptr mono_functions();
+
 mono_wrapper::functions_t const &executor_base::get_f()
 {
-    return ::mono_functions();
+    return *(::mono_functions());
 }
 
 void executor_base::mono_thread_suspend_all_other_threads()

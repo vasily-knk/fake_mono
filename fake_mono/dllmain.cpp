@@ -4,15 +4,15 @@
 
 namespace
 {
-    optional<mono_wrapper::functions_t> g_mono_functions;
+    mono_wrapper::functions_cptr g_mono_functions;
 }
 
-mono_wrapper::functions_t const &mono_functions()
+mono_wrapper::functions_cptr mono_functions()
 {
     if (!g_mono_functions)
         throw std::runtime_error("mono functions not loaded");
 
-    return *g_mono_functions;
+    return g_mono_functions;
 }
 
 
@@ -30,7 +30,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         auto real_dll_path = dll_path.parent_path() / "_mono.dll";
         
         HMODULE real_dll = LoadLibraryA(real_dll_path.string().c_str());
-        g_mono_functions = mono_wrapper::load_mono_functions_from_dll(real_dll);
+        g_mono_functions = make_shared<mono_wrapper::functions_t>(mono_wrapper::load_mono_functions_from_dll(real_dll));
     }
     
     
