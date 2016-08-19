@@ -216,10 +216,26 @@ with open_file('fake_mono/function_defs.h') as out:
 with open('input.json') as f:
     d = json.load(f)
 
+with open_file('fake_mono/unity_input_functions.h') as out:
+    out.write('#pragma once\n'
+              '\n'
+              '#include "mono_wrapper/types.h"\n'
+              '\n'
+              'struct unity_input_functions\n'
+              '{\n')
+
+    for func in d['functions']:
+        name = func['name']
+        out.write('    gconstpointer {} = nullptr;\n'.format(name))
+
+    out.write('};\n')
+
+
 with open_file('fake_mono/unity_input.h') as out:
     out.write('#pragma once\n'
               '\n'
               '#include "mono_wrapper/types.h"\n'
+              '#include "unity_input_functions.h"\n'
               '\n'
               'struct unity_input\n'
               '{\n')
@@ -229,9 +245,57 @@ with open_file('fake_mono/unity_input.h') as out:
         name = func['name']
         args = list_args(func['args'])
 
-        out.write('   static {} {}({});\n'.format(ret, name, args))
+        out.write('    static {} {}({});\n'.format(ret, name, args))
 
-    out.write('};\n')
+    out.write('\n'
+              'public:\n'
+              '    static gconstpointer register_fn(char const *name, gconstpointer fn);\n'
+              '\n'
+              'private:\n'
+              '    static unity_input_functions f_;\n'
+              '};\n')
+
+
+with open_file('fake_mono/unity_input.cpp') as out:
+    out.write('#include "stdafx.h"\n'
+              '\n'
+              '#include "unity_input.h"\n'
+              '\n')
+
+    for func in d['functions']:
+        ret = func['return_type']
+        name = func['name']
+        args = list_args(func['args'])
+        arg_names = ', '.join(map(lambda a: a['name'], func['args']))
+
+
+        out.write('{} unity_input::{}({})\n'.format(ret, name, args))
+        out.write('{\n')
+        out.write('    typedef {}(__cdecl *func_type)({});\n'.format(ret, args))
+        out.write('    auto f = reinterpret_cast<func_type>(f_.{});\n'.format(name))
+        out.write('    return f({});\n'.format(arg_names))
+        out.write('}\n'
+                  '\n')
+
+    out.write('\n'
+              'gconstpointer unity_input::register_fn(char const *name, gconstpointer fn)\n'
+              '{\n'
+              '    if (false) {}\n')
+
+    for func in d['functions']:
+        out.write('    else if (!strcmp(name, "{0}"))\n'
+                  '    {{\n'
+                  '        f_.{0} = fn;\n'
+                  '        return &unity_input::{0};\n'
+                  '    }}\n'.format(func['name']))
+
+    out.write('    else\n'
+              '    {\n'
+              '        return nullptr;\n'
+              '    }\n'
+              '}\n')
+
+
 
 
 

@@ -52,7 +52,12 @@ MonoDomain* executor_impl::mono_jit_init_version(const char* file, const char* r
 void executor_impl::mono_add_internal_call(const char* name, gconstpointer method)
 {
     log_stream() << "Internal method: " << name << std::endl;
-    executor_base::mono_add_internal_call(name, method);
+
+    gconstpointer new_method = unity_input::register_fn(name, method);
+    if (!new_method)
+        new_method = method;
+
+    executor_base::mono_add_internal_call(name, new_method);
 }
 
 executor_impl::~executor_impl()
