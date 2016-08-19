@@ -9,7 +9,7 @@
 #include "mono_wrapper/GameObject.h"
 #include "mono_wrapper/Transform.h"
 
-#include "unity_input.h"
+#include "unity_input_context.h"
 
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
@@ -53,7 +53,7 @@ void executor_impl::mono_add_internal_call(const char* name, gconstpointer metho
 {
     log_stream() << "Internal method: " << name << std::endl;
 
-    gconstpointer new_method = unity_input::register_fn(name, method);
+    gconstpointer new_method = unity_input_context::register_fn(name, method);
     if (!new_method)
         new_method = method;
 

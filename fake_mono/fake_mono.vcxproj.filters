@@ -42,10 +42,19 @@
     <ClInclude Include="executor_control.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unity_input_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_input_context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="unity_input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="unity_input_functions.h">
+    <ClInclude Include="unity_input_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_input_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,7 +80,13 @@
     <ClCompile Include="monitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="unity_input.cpp">
+    <ClCompile Include="unity_input_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unity_input_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unity_input_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
