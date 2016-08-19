@@ -44,6 +44,10 @@ typedef int gint32;
 typedef long gint64;
 typedef unsigned char   guchar;
 typedef UInt16 gunichar2;
+
+typedef MonoObject* MonoStruct;
+typedef MonoObject** MonoStruct_out;
+
 // struct MonoString 
 // {
 // 	gint32 monoObjectPart1;

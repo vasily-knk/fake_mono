@@ -103,6 +103,7 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     <ClInclude Include="monitor.h" />
     <ClInclude Include="stats.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="unity_input.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

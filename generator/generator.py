@@ -206,4 +206,33 @@ with open_file('fake_mono/function_defs.h') as out:
 
         out.write('    {} {}({});\n'.format(ret, name, args))
 
-    out.write('}\n');
+    out.write('}\n')
+
+"""
+ Input section
+
+"""
+
+with open('input.json') as f:
+    d = json.load(f)
+
+with open_file('fake_mono/unity_input.h') as out:
+    out.write('#pragma once\n'
+              '\n'
+              '#include "mono_wrapper/types.h"\n'
+              '\n'
+              'struct unity_input\n'
+              '{\n')
+
+    for func in d['functions']:
+        ret = func['return_type']
+        name = func['name']
+        args = list_args(func['args'])
+
+        out.write('   static {} {}({});\n'.format(ret, name, args))
+
+    out.write('};\n')
+
+
+
+

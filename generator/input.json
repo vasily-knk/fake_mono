@@ -24,7 +24,7 @@
       },
       {  
          "name":"GetButton",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"buttonName",
@@ -35,7 +35,7 @@
       },
       {  
          "name":"GetButtonUp",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"buttonName",
@@ -46,7 +46,7 @@
       },
       {  
          "name":"GetButtonDown",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"buttonName",
@@ -64,7 +64,7 @@
       },
       {  
          "name":"GetKeyDownInt",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"key",
@@ -75,7 +75,7 @@
       },
       {  
          "name":"GetKeyDownString",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"name",
@@ -86,7 +86,7 @@
       },
       {  
          "name":"GetKeyInt",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"key",
@@ -97,7 +97,7 @@
       },
       {  
          "name":"GetKeyString",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"name",
@@ -108,7 +108,7 @@
       },
       {  
          "name":"GetKeyUpInt",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"key",
@@ -119,7 +119,7 @@
       },
       {  
          "name":"GetKeyUpString",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"name",
@@ -130,7 +130,7 @@
       },
       {  
          "name":"GetMouseButton",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"button",
@@ -141,7 +141,7 @@
       },
       {  
          "name":"GetMouseButtonDown",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"button",
@@ -152,7 +152,7 @@
       },
       {  
          "name":"GetMouseButtonUp",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
             {  
                "name":"button",
@@ -278,28 +278,28 @@
       },
       {  
          "name":"get_anyKey",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_anyKeyDown",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_backButtonLeavesApp",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_compensateSensors",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
@@ -313,14 +313,14 @@
       },
       {  
          "name":"get_eatKeyPressOnTextFieldFocus",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_imeIsSelected",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
@@ -334,35 +334,35 @@
       },
       {  
          "name":"get_isGyroAvailable",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_mousePresent",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_multiTouchEnabled",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_simulateMouseWithTouches",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_stylusTouchSupported",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
@@ -376,14 +376,14 @@
       },
       {  
          "name":"get_touchPressureSupported",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
       },
       {  
          "name":"get_touchSupported",
-         "return_type":"MonoBoolean",
+         "return_type":"gboolean",
          "args":[  
 
          ]
@@ -401,7 +401,7 @@
          "args":[  
             {  
                "name":"value",
-               "type":"MonoBoolean",
+               "type":"gboolean",
                "array":false
             }
          ]
@@ -412,7 +412,7 @@
          "args":[  
             {  
                "name":"value",
-               "type":"MonoBoolean",
+               "type":"gboolean",
                "array":false
             }
          ]
@@ -423,7 +423,7 @@
          "args":[  
             {  
                "name":"value",
-               "type":"MonoBoolean",
+               "type":"gboolean",
                "array":false
             }
          ]
@@ -445,7 +445,7 @@
          "args":[  
             {  
                "name":"value",
-               "type":"MonoBoolean",
+               "type":"gboolean",
                "array":false
             }
          ]
@@ -456,7 +456,7 @@
          "args":[  
             {  
                "name":"value",
-               "type":"MonoBoolean",
+               "type":"gboolean",
                "array":false
             }
          ]

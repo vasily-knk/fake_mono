@@ -9,6 +9,8 @@
 #include "mono_wrapper/GameObject.h"
 #include "mono_wrapper/Transform.h"
 
+#include "unity_input.h"
+
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
 
