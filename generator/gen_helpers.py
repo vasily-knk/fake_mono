@@ -61,6 +61,14 @@ class BlockWrapper:
         write_indent(self.out, '}\n')
 
 
+class IndentWrapper:
+    def __enter__(self):
+        inc_indent()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        dec_indent()
+
+
 def wrap_functions(d):
     def arg2str(arg):
         return '{} {}{}'.format(arg['type'], arg['name'], '[]' if arg['array'] else '')

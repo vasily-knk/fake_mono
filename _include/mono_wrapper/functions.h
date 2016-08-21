@@ -2,10 +2,8 @@
 
 #include "mono_wrapper/types.h"
 #include "mono_wrapper/mono_wrapper_fwd.h"
-
 namespace mono_wrapper
 {
-
 struct functions_t
 {
     typedef void(__cdecl *mono_thread_suspend_all_other_threads_t)();
@@ -224,7 +222,7 @@ struct functions_t
     typedef void(__cdecl *mono_trace_set_mask_string_t)(char* value);
     typedef gint64(__cdecl *mono_gc_get_used_size_t)();
     typedef gint64(__cdecl *mono_gc_get_heap_size_t)();
-
+    
     mono_thread_suspend_all_other_threads_t mono_thread_suspend_all_other_threads = nullptr;
     mono_thread_pool_cleanup_t mono_thread_pool_cleanup = nullptr;
     mono_threads_set_shutting_down_t mono_threads_set_shutting_down = nullptr;
@@ -442,7 +440,5 @@ struct functions_t
     mono_gc_get_used_size_t mono_gc_get_used_size = nullptr;
     mono_gc_get_heap_size_t mono_gc_get_heap_size = nullptr;
 };
-
 functions_t load_mono_functions_from_dll(HMODULE dll);
-
 } // namespace mono_wrapper
