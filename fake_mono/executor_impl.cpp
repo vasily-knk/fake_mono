@@ -14,6 +14,8 @@
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
 
+mono_wrapper::functions_cptr mono_functions();
+
 
 executor_ptr create_executor()
 {
@@ -21,6 +23,7 @@ executor_ptr create_executor()
 }
 
 executor_impl::executor_impl()
+    : executor_base(::mono_functions())
 {
     //monitor_thread_ = boost::thread(boost::bind(&monitor::run, this));
 }
@@ -78,7 +81,7 @@ MonoObject* executor_impl::mono_runtime_invoke(MonoMethod* method, void* p_obj, 
                 "Start",
             };
             
-            char const *method_name = get_f()->mono_method_get_name(method);
+            char const *method_name = functions()->mono_method_get_name(method);
             auto it = boost::find_if(method_names, [method_name](char const *n)
             {
                 return !strcmp(n, method_name);
@@ -124,9 +127,9 @@ vector<string> executor_impl::get_assembly_names()
 {
     using namespace get_assembly_names_detail;
     
-    context_t context(get_f());
+    context_t context(functions());
 
-    get_f()->mono_assembly_foreach(static_cast<GFunc>(&visit_assembly), &context);
+    functions()->mono_assembly_foreach(static_cast<GFunc>(&visit_assembly), &context);
 
     return std::move(context.dst);
 }
@@ -165,22 +168,22 @@ MonoImage *executor_impl::find_image_by_name(char const *name)
 {
     using namespace find_image_by_name_detail;
     
-    context_t context(get_f(), name);
-    get_f()->mono_assembly_foreach(static_cast<GFunc>(&visit_assembly), &context);
+    context_t context(functions(), name);
+    functions()->mono_assembly_foreach(static_cast<GFunc>(&visit_assembly), &context);
     return context.result;
 }
 
 MonoObject *executor_impl::get_type_by_name(char const *name)
 {
     MonoImage *core = find_image_by_name("mscorlib");
-    MonoClass *type_class = get_f()->mono_class_from_name(core, "System", "Type");
-    MonoMethod *get_type_method = get_f()->mono_class_get_method_from_name(type_class, "GetType", 1);
+    MonoClass *type_class = functions()->mono_class_from_name(core, "System", "Type");
+    MonoMethod *get_type_method = functions()->mono_class_get_method_from_name(type_class, "GetType", 1);
 
-    MonoString *name_string = get_f()->mono_string_new_wrapper(name);
+    MonoString *name_string = functions()->mono_string_new_wrapper(name);
     void* args[1] = {name_string};
 
     MonoObject *ex = nullptr;
-    MonoObject *result = get_f()->mono_runtime_invoke(get_type_method, nullptr, args, &ex);
+    MonoObject *result = functions()->mono_runtime_invoke(get_type_method, nullptr, args, &ex);
     return result;
 }
 
@@ -200,7 +203,7 @@ void executor_impl::create_watcher()
     Verify(boost::this_thread::get_id() == *main_thread_id_);
 
     watcher_data_t const &watcher_data = get_watcher_data();
-    MonoObject *game_object = get_f()->mono_runtime_invoke(watcher_data.create_method, nullptr, nullptr, nullptr);
+    MonoObject *game_object = functions()->mono_runtime_invoke(watcher_data.create_method, nullptr, nullptr, nullptr);
     Verify(game_object);
 
     Verify(watchers_to_executors_.count(game_object) == 0);
@@ -237,7 +240,7 @@ void executor_impl::init_watcher_data() const
     
     Verify(boost::this_thread::get_id() == *main_thread_id_);
 
-    auto fptr = get_f();
+    auto fptr = functions();
     fs::path assembly_path;
     {
         boost::mutex::scoped_lock l(assembly_dir_mutex_);
@@ -263,7 +266,7 @@ void executor_impl::init_watcher_data() const
 
 void executor_impl::internal_print(MonoString *str)
 {
-    char const *cstr = get_f()->mono_string_to_utf8(str);
+    char const *cstr = ::mono_functions()->mono_string_to_utf8(str);
     OutputDebugStringA(cstr);
     log_stream() << cstr << std::flush;
 }

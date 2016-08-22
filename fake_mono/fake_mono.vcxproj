@@ -106,7 +106,10 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     <ClInclude Include="unity_input.h" />
     <ClInclude Include="unity_input_base.h" />
     <ClInclude Include="unity_input_context.h" />
+    <ClInclude Include="unity_input_executor.h" />
+    <ClInclude Include="unity_input_executor_base.h" />
     <ClInclude Include="unity_input_functions.h" />
+    <ClInclude Include="unity_input_fwd.h" />
     <ClInclude Include="unity_input_impl.h" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +132,7 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     </ClCompile>
     <ClCompile Include="unity_input_base.cpp" />
     <ClCompile Include="unity_input_context.cpp" />
+    <ClCompile Include="unity_input_executor_base.cpp" />
     <ClCompile Include="unity_input_impl.cpp" />
   </ItemGroup>
   <ItemGroup>

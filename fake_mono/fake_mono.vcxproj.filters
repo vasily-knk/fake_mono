@@ -57,6 +57,15 @@
     <ClInclude Include="unity_input_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unity_input_executor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_input_executor_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unity_input_fwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -87,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="unity_input_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unity_input_executor_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

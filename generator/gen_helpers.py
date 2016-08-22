@@ -107,6 +107,17 @@ def open_file(name):
     return open(os.path.join('../', name), 'wt')
 
 
+def write_functions(name, funcs, out):
+    with StructWrapper(name, out):
+        for func in funcs:
+            write_indent(out, 'typedef {return_type}(__cdecl *{name}_t)({args_list});\n'.format(**func))
+
+        write_indent(out, '\n')
+
+        for func in funcs:
+            write_indent(out, '{name}_t {name} = nullptr;\n'.format(**func))
+
+
 def write_interface(name, funcs, out):
     with StructWrapper(name, out):
         write_indent(out, 'virtual ~{0}() {{}}\n'

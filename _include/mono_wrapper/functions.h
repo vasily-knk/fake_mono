@@ -2,6 +2,7 @@
 
 #include "mono_wrapper/types.h"
 #include "mono_wrapper/mono_wrapper_fwd.h"
+
 namespace mono_wrapper
 {
 struct functions_t
@@ -440,5 +441,6 @@ struct functions_t
     mono_gc_get_used_size_t mono_gc_get_used_size = nullptr;
     mono_gc_get_heap_size_t mono_gc_get_heap_size = nullptr;
 };
+
 functions_t load_mono_functions_from_dll(HMODULE dll);
 } // namespace mono_wrapper

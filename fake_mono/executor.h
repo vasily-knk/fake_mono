@@ -223,3 +223,5 @@ struct executor
     virtual gint64 mono_gc_get_used_size() = 0;
     virtual gint64 mono_gc_get_heap_size() = 0;
 };
+
+executor_ptr create_executor(mono_wrapper::functions_cptr);

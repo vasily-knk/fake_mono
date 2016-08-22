@@ -1,8 +1,11 @@
 #pragma once
 
 #include "mono_wrapper/types.h"
+#include "unity_input_fwd.h"
 
-struct unity_input_functions_t
+namespace unity_input
+{
+struct functions_t
 {
     typedef float(__cdecl *GetAxis_t)(MonoString* axisName);
     typedef float(__cdecl *GetAxisRaw_t)(MonoString* axisName);
@@ -53,7 +56,7 @@ struct unity_input_functions_t
     typedef void(__cdecl *set_imeCompositionMode_t)(MonoObject* value);
     typedef void(__cdecl *set_multiTouchEnabled_t)(gboolean value);
     typedef void(__cdecl *set_simulateMouseWithTouches_t)(gboolean value);
-
+    
     GetAxis_t GetAxis = nullptr;
     GetAxisRaw_t GetAxisRaw = nullptr;
     GetButton_t GetButton = nullptr;
@@ -104,6 +107,4 @@ struct unity_input_functions_t
     set_multiTouchEnabled_t set_multiTouchEnabled = nullptr;
     set_simulateMouseWithTouches_t set_simulateMouseWithTouches = nullptr;
 };
-
-typedef shared_ptr<unity_input_functions_t> unity_input_functions_ptr;
-typedef shared_ptr<unity_input_functions_t const> unity_input_functions_cptr;
+} // namespace unity_input

@@ -15,7 +15,6 @@ mono_wrapper::functions_cptr mono_functions()
     return g_mono_functions;
 }
 
-
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
