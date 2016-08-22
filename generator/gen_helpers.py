@@ -34,13 +34,20 @@ class NamespaceWrapper:
 
 
 class StructWrapper:
-    def __init__(self, name, out):
+    def __init__(self, name, out, bases=list()):
         self.name = name
+        self.bases = bases
         self.out = out
 
     def __enter__(self):
-        write_indent(self.out, 'struct {}\n'
-                               '{{\n'.format(self.name))
+
+        write_indent(self.out, 'struct {}\n'.format(self.name))
+
+        if self.bases:
+            with IndentWrapper():
+                write_indent(self.out, ': {}\n'.format('\n, '.join(self.bases)))
+
+        write_indent(self.out, '{\n')
         inc_indent()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -62,11 +69,25 @@ class BlockWrapper:
 
 
 class IndentWrapper:
+    def __init__(self):
+        pass
+
     def __enter__(self):
         inc_indent()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         dec_indent()
+
+
+class DedentWrapper:
+    def __init__(self):
+        pass
+
+    def __enter__(self):
+        dec_indent()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        inc_indent()
 
 
 def wrap_functions(d):
@@ -76,7 +97,7 @@ def wrap_functions(d):
     def extend(func):
         result = func
         result['args_list'] = ', '.join(map(arg2str, func['args']))
-        result['arg_names'] = ', '.join(map(lambda a: a['name'], func['args']))
+        result['args_names'] = ', '.join(map(lambda a: a['name'], func['args']))
         return result
 
     return [extend(func) for func in d['functions']]
@@ -85,3 +106,56 @@ def wrap_functions(d):
 def open_file(name):
     return open(os.path.join('../', name), 'wt')
 
+
+def write_interface(name, funcs, out):
+    with StructWrapper(name, out):
+        write_indent(out, 'virtual ~{0}() {{}}\n'
+                          '\n'.format(name))
+
+        for func in funcs:
+            write_indent(out, 'virtual {return_type} {name}({args_list}) = 0;\n'.format(**func))
+
+
+def write_base_header(name, interface_name, functions_cptr, funcs, out):
+    with StructWrapper(name, out, bases=[interface_name]):
+        write_indent(out, '{0}({1} functions);\n'
+                          '\n'.format(name, functions_cptr))
+
+        for func in funcs:
+            write_indent(out, '{return_type} {name}({args_list}) override;\n'.format(**func))
+
+        write_indent(out, '\n')
+
+        with DedentWrapper():
+            write_indent(out, 'protected:\n')
+
+        write_indent(out, '{0} functions() const;\n'
+                          '\n'.format(functions_cptr))
+
+        with DedentWrapper():
+            write_indent(out, 'public:\n')
+
+        write_indent(out, '{0} functions_;\n'.format(functions_cptr))
+
+
+def write_base_source(name, functions_cptr, funcs, out):
+    write_indent(out, '{0}::{0}({1} functions)\n'
+                      '    : functions_(functions)\n'
+                      '{{}}\n'
+                      '\n'.format(name, functions_cptr))
+
+    write_indent(out, '{1} {0}::functions() const\n'.format(name, functions_cptr))
+    with BlockWrapper(out):
+        write_indent(out, 'return functions_;\n')
+
+    write_indent(out, '\n')
+
+    for func in funcs:
+        ext_func = func
+        ext_func['class_name'] = name
+
+        write_indent(out, '{return_type} {class_name}::{name}({args_list})\n'.format(**ext_func))
+        with BlockWrapper(out):
+            write_indent(out, 'return functions_->{name}({args_names});\n'.format(**func))
+
+        write_indent(out, '\n')

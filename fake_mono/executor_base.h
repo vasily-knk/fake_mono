@@ -6,8 +6,8 @@
 struct executor_base
     : executor
 {
-    executor_base();
-    
+    executor_base(mono_wrapper::functions_cptr functions);
+
     void mono_thread_suspend_all_other_threads() override;
     void mono_thread_pool_cleanup() override;
     void mono_threads_set_shutting_down() override;
@@ -224,8 +224,10 @@ struct executor_base
     void mono_trace_set_mask_string(char* value) override;
     gint64 mono_gc_get_used_size() override;
     gint64 mono_gc_get_heap_size() override;
-
+    
 protected:
-    static mono_wrapper::functions_cptr get_f();
-};
+    mono_wrapper::functions_cptr functions() const;
 
+public:
+    mono_wrapper::functions_cptr functions_;
+};

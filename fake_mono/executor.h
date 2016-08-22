@@ -4,8 +4,8 @@
 
 struct executor
 {
-    virtual ~executor() {};
-    
+    virtual ~executor() {}
+
     virtual void mono_thread_suspend_all_other_threads() = 0;
     virtual void mono_thread_pool_cleanup() = 0;
     virtual void mono_threads_set_shutting_down() = 0;
@@ -223,7 +223,3 @@ struct executor
     virtual gint64 mono_gc_get_used_size() = 0;
     virtual gint64 mono_gc_get_heap_size() = 0;
 };
-
-typedef shared_ptr<executor> executor_ptr;
-
-executor_ptr create_executor();

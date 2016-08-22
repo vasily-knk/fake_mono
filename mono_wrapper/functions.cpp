@@ -3,11 +3,10 @@
 
 namespace mono_wrapper
 {
-
 functions_t load_mono_functions_from_dll(HMODULE dll)
 {
     functions_t result;
-    
+
     result.mono_thread_suspend_all_other_threads = reinterpret_cast<functions_t::mono_thread_suspend_all_other_threads_t>(GetProcAddress(dll, "mono_thread_suspend_all_other_threads"));
     result.mono_thread_pool_cleanup = reinterpret_cast<functions_t::mono_thread_pool_cleanup_t>(GetProcAddress(dll, "mono_thread_pool_cleanup"));
     result.mono_threads_set_shutting_down = reinterpret_cast<functions_t::mono_threads_set_shutting_down_t>(GetProcAddress(dll, "mono_threads_set_shutting_down"));
@@ -227,5 +226,4 @@ functions_t load_mono_functions_from_dll(HMODULE dll)
     
     return result;
 }
-
 } // namespace mono_wrapper
