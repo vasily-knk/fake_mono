@@ -98,19 +98,17 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     <ClInclude Include="executor_base.h" />
     <ClInclude Include="executor_control.h" />
     <ClInclude Include="executor_impl.h" />
+    <ClInclude Include="fake_mono_fwd.h" />
     <ClInclude Include="function_defs.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="monitor.h" />
     <ClInclude Include="stats.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="unity_input.h" />
-    <ClInclude Include="unity_input_base.h" />
     <ClInclude Include="unity_input_context.h" />
     <ClInclude Include="unity_input_executor.h" />
     <ClInclude Include="unity_input_executor_base.h" />
     <ClInclude Include="unity_input_functions.h" />
     <ClInclude Include="unity_input_fwd.h" />
-    <ClInclude Include="unity_input_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -130,10 +128,9 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="unity_input_base.cpp" />
     <ClCompile Include="unity_input_context.cpp" />
     <ClCompile Include="unity_input_executor_base.cpp" />
-    <ClCompile Include="unity_input_impl.cpp" />
+    <ClCompile Include="unity_input_executor_impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fake_mono.def" />

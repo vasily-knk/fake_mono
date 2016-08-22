@@ -221,3 +221,4 @@ extern "C"
     gint64 mono_gc_get_used_size();
     gint64 mono_gc_get_heap_size();
 }
+

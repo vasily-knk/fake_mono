@@ -56,7 +56,7 @@ void executor_impl::mono_add_internal_call(const char* name, gconstpointer metho
 {
     log_stream() << "Internal method: " << name << std::endl;
 
-    gconstpointer new_method = unity_input_context::register_fn(name, method);
+    gconstpointer new_method = unity_input::context::register_function(name, method);
     if (!new_method)
         new_method = method;
 

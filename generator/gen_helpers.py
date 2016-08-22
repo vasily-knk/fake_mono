@@ -30,7 +30,7 @@ class NamespaceWrapper:
                                '{{\n'.format(self.name))
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        write_indent(self.out, '}} // namespace {}'.format(self.name))
+        write_indent(self.out, '}} // namespace {}\n'.format(self.name))
 
 
 class StructWrapper:
@@ -65,7 +65,8 @@ class BlockWrapper:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         dec_indent()
-        write_indent(self.out, '}\n')
+        write_indent(self.out, '}\n'
+                               '\n')
 
 
 class IndentWrapper:
@@ -88,6 +89,11 @@ class DedentWrapper:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         inc_indent()
+
+
+def write_struct_section(out, text):
+    with DedentWrapper():
+        write_indent(out, '\n{}:\n'.format(text))
 
 
 def wrap_functions(d):

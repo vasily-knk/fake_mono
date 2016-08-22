@@ -1,10 +1,11 @@
 #pragma once
 
 #include "mono_wrapper/types.h"
-#include "unity_input_functions.h"
-#include "unity_input.h"
+#include "unity_input_fwd.h"
 
-struct unity_input_context
+namespace unity_input
+{
+struct context
 {
     static float GetAxis(MonoString* axisName);
     static float GetAxisRaw(MonoString* axisName);
@@ -57,9 +58,10 @@ struct unity_input_context
     static void set_simulateMouseWithTouches(gboolean value);
 
 public:
-    static gconstpointer register_fn(char const *name, gconstpointer fn);
+    static gconstpointer register_function(char const *name, gconstpointer fn);
 
 private:
-    static unity_input_functions_ptr f_;
-    static unity_input_ptr unity_input_;
+    static functions_ptr functions_;
+    static executor_ptr executor_;
 };
+} // namespace unity_input

@@ -226,4 +226,5 @@ functions_t load_mono_functions_from_dll(HMODULE dll)
     
     return result;
 }
+
 } // namespace mono_wrapper

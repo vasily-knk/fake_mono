@@ -1,506 +1,555 @@
 #include "stdafx.h"
-
 #include "unity_input_context.h"
+#include "unity_input_functions.h"
+#include "unity_input_executor.h"
 
-unity_input_functions_ptr unity_input_context::f_ = make_shared<unity_input_functions_t>();
-unity_input_ptr unity_input_context::unity_input_ = create_unity_input(unity_input_context::f_);
-
-float unity_input_context::GetAxis(MonoString* axisName)
+namespace unity_input
 {
-    return unity_input_->GetAxis(axisName);
+functions_ptr context::functions_ = make_shared<functions_t>();
+executor_ptr context::executor_ = create_executor(context::functions_);
+
+float context::GetAxis(MonoString* axisName)
+{
+    return executor_->GetAxis(axisName);
 }
 
-float unity_input_context::GetAxisRaw(MonoString* axisName)
+float context::GetAxisRaw(MonoString* axisName)
 {
-    return unity_input_->GetAxisRaw(axisName);
+    return executor_->GetAxisRaw(axisName);
 }
 
-gboolean unity_input_context::GetButton(MonoString* buttonName)
+gboolean context::GetButton(MonoString* buttonName)
 {
-    return unity_input_->GetButton(buttonName);
+    return executor_->GetButton(buttonName);
 }
 
-gboolean unity_input_context::GetButtonUp(MonoString* buttonName)
+gboolean context::GetButtonUp(MonoString* buttonName)
 {
-    return unity_input_->GetButtonUp(buttonName);
+    return executor_->GetButtonUp(buttonName);
 }
 
-gboolean unity_input_context::GetButtonDown(MonoString* buttonName)
+gboolean context::GetButtonDown(MonoString* buttonName)
 {
-    return unity_input_->GetButtonDown(buttonName);
+    return executor_->GetButtonDown(buttonName);
 }
 
-MonoArray* unity_input_context::GetJoystickNames()
+MonoArray* context::GetJoystickNames()
 {
-    return unity_input_->GetJoystickNames();
+    return executor_->GetJoystickNames();
 }
 
-gboolean unity_input_context::GetKeyDownInt(int32_t key)
+gboolean context::GetKeyDownInt(int32_t key)
 {
-    return unity_input_->GetKeyDownInt(key);
+    return executor_->GetKeyDownInt(key);
 }
 
-gboolean unity_input_context::GetKeyDownString(MonoString* name)
+gboolean context::GetKeyDownString(MonoString* name)
 {
-    return unity_input_->GetKeyDownString(name);
+    return executor_->GetKeyDownString(name);
 }
 
-gboolean unity_input_context::GetKeyInt(int32_t key)
+gboolean context::GetKeyInt(int32_t key)
 {
-    return unity_input_->GetKeyInt(key);
+    return executor_->GetKeyInt(key);
 }
 
-gboolean unity_input_context::GetKeyString(MonoString* name)
+gboolean context::GetKeyString(MonoString* name)
 {
-    return unity_input_->GetKeyString(name);
+    return executor_->GetKeyString(name);
 }
 
-gboolean unity_input_context::GetKeyUpInt(int32_t key)
+gboolean context::GetKeyUpInt(int32_t key)
 {
-    return unity_input_->GetKeyUpInt(key);
+    return executor_->GetKeyUpInt(key);
 }
 
-gboolean unity_input_context::GetKeyUpString(MonoString* name)
+gboolean context::GetKeyUpString(MonoString* name)
 {
-    return unity_input_->GetKeyUpString(name);
+    return executor_->GetKeyUpString(name);
 }
 
-gboolean unity_input_context::GetMouseButton(int32_t button)
+gboolean context::GetMouseButton(int32_t button)
 {
-    return unity_input_->GetMouseButton(button);
+    return executor_->GetMouseButton(button);
 }
 
-gboolean unity_input_context::GetMouseButtonDown(int32_t button)
+gboolean context::GetMouseButtonDown(int32_t button)
 {
-    return unity_input_->GetMouseButtonDown(button);
+    return executor_->GetMouseButtonDown(button);
 }
 
-gboolean unity_input_context::GetMouseButtonUp(int32_t button)
+gboolean context::GetMouseButtonUp(int32_t button)
 {
-    return unity_input_->GetMouseButtonUp(button);
+    return executor_->GetMouseButtonUp(button);
 }
 
-void unity_input_context::INTERNAL_CALL_GetAccelerationEvent(int32_t index, MonoStruct_out value)
+void context::INTERNAL_CALL_GetAccelerationEvent(int32_t index, MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_CALL_GetAccelerationEvent(index, value);
+    return executor_->INTERNAL_CALL_GetAccelerationEvent(index, value);
 }
 
-void unity_input_context::INTERNAL_CALL_GetTouch(int32_t index, MonoStruct_out value)
+void context::INTERNAL_CALL_GetTouch(int32_t index, MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_CALL_GetTouch(index, value);
+    return executor_->INTERNAL_CALL_GetTouch(index, value);
 }
 
-void unity_input_context::INTERNAL_get_acceleration(MonoStruct_out value)
+void context::INTERNAL_get_acceleration(MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_get_acceleration(value);
+    return executor_->INTERNAL_get_acceleration(value);
 }
 
-void unity_input_context::INTERNAL_get_compositionCursorPos(MonoStruct_out value)
+void context::INTERNAL_get_compositionCursorPos(MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_get_compositionCursorPos(value);
+    return executor_->INTERNAL_get_compositionCursorPos(value);
 }
 
-void unity_input_context::INTERNAL_get_mousePosition(MonoStruct_out value)
+void context::INTERNAL_get_mousePosition(MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_get_mousePosition(value);
+    return executor_->INTERNAL_get_mousePosition(value);
 }
 
-void unity_input_context::INTERNAL_get_mouseScrollDelta(MonoStruct_out value)
+void context::INTERNAL_get_mouseScrollDelta(MonoStruct_out value)
 {
-    return unity_input_->INTERNAL_get_mouseScrollDelta(value);
+    return executor_->INTERNAL_get_mouseScrollDelta(value);
 }
 
-void unity_input_context::INTERNAL_set_compositionCursorPos(MonoStruct value)
+void context::INTERNAL_set_compositionCursorPos(MonoStruct value)
 {
-    return unity_input_->INTERNAL_set_compositionCursorPos(value);
+    return executor_->INTERNAL_set_compositionCursorPos(value);
 }
 
-void unity_input_context::ResetInputAxes()
+void context::ResetInputAxes()
 {
-    return unity_input_->ResetInputAxes();
+    return executor_->ResetInputAxes();
 }
 
-MonoObject* unity_input_context::get_deviceOrientation()
+MonoObject* context::get_deviceOrientation()
 {
-    return unity_input_->get_deviceOrientation();
+    return executor_->get_deviceOrientation();
 }
 
-MonoObject* unity_input_context::get_imeCompositionMode()
+MonoObject* context::get_imeCompositionMode()
 {
-    return unity_input_->get_imeCompositionMode();
+    return executor_->get_imeCompositionMode();
 }
 
-int32_t unity_input_context::get_accelerationEventCount()
+int32_t context::get_accelerationEventCount()
 {
-    return unity_input_->get_accelerationEventCount();
+    return executor_->get_accelerationEventCount();
 }
 
-gboolean unity_input_context::get_anyKey()
+gboolean context::get_anyKey()
 {
-    return unity_input_->get_anyKey();
+    return executor_->get_anyKey();
 }
 
-gboolean unity_input_context::get_anyKeyDown()
+gboolean context::get_anyKeyDown()
 {
-    return unity_input_->get_anyKeyDown();
+    return executor_->get_anyKeyDown();
 }
 
-gboolean unity_input_context::get_backButtonLeavesApp()
+gboolean context::get_backButtonLeavesApp()
 {
-    return unity_input_->get_backButtonLeavesApp();
+    return executor_->get_backButtonLeavesApp();
 }
 
-gboolean unity_input_context::get_compensateSensors()
+gboolean context::get_compensateSensors()
 {
-    return unity_input_->get_compensateSensors();
+    return executor_->get_compensateSensors();
 }
 
-MonoString* unity_input_context::get_compositionString()
+MonoString* context::get_compositionString()
 {
-    return unity_input_->get_compositionString();
+    return executor_->get_compositionString();
 }
 
-gboolean unity_input_context::get_eatKeyPressOnTextFieldFocus()
+gboolean context::get_eatKeyPressOnTextFieldFocus()
 {
-    return unity_input_->get_eatKeyPressOnTextFieldFocus();
+    return executor_->get_eatKeyPressOnTextFieldFocus();
 }
 
-gboolean unity_input_context::get_imeIsSelected()
+gboolean context::get_imeIsSelected()
 {
-    return unity_input_->get_imeIsSelected();
+    return executor_->get_imeIsSelected();
 }
 
-MonoString* unity_input_context::get_inputString()
+MonoString* context::get_inputString()
 {
-    return unity_input_->get_inputString();
+    return executor_->get_inputString();
 }
 
-gboolean unity_input_context::get_isGyroAvailable()
+gboolean context::get_isGyroAvailable()
 {
-    return unity_input_->get_isGyroAvailable();
+    return executor_->get_isGyroAvailable();
 }
 
-gboolean unity_input_context::get_mousePresent()
+gboolean context::get_mousePresent()
 {
-    return unity_input_->get_mousePresent();
+    return executor_->get_mousePresent();
 }
 
-gboolean unity_input_context::get_multiTouchEnabled()
+gboolean context::get_multiTouchEnabled()
 {
-    return unity_input_->get_multiTouchEnabled();
+    return executor_->get_multiTouchEnabled();
 }
 
-gboolean unity_input_context::get_simulateMouseWithTouches()
+gboolean context::get_simulateMouseWithTouches()
 {
-    return unity_input_->get_simulateMouseWithTouches();
+    return executor_->get_simulateMouseWithTouches();
 }
 
-gboolean unity_input_context::get_stylusTouchSupported()
+gboolean context::get_stylusTouchSupported()
 {
-    return unity_input_->get_stylusTouchSupported();
+    return executor_->get_stylusTouchSupported();
 }
 
-int32_t unity_input_context::get_touchCount()
+int32_t context::get_touchCount()
 {
-    return unity_input_->get_touchCount();
+    return executor_->get_touchCount();
 }
 
-gboolean unity_input_context::get_touchPressureSupported()
+gboolean context::get_touchPressureSupported()
 {
-    return unity_input_->get_touchPressureSupported();
+    return executor_->get_touchPressureSupported();
 }
 
-gboolean unity_input_context::get_touchSupported()
+gboolean context::get_touchSupported()
 {
-    return unity_input_->get_touchSupported();
+    return executor_->get_touchSupported();
 }
 
-int32_t unity_input_context::mainGyroIndex_Internal()
+int32_t context::mainGyroIndex_Internal()
 {
-    return unity_input_->mainGyroIndex_Internal();
+    return executor_->mainGyroIndex_Internal();
 }
 
-void unity_input_context::set_backButtonLeavesApp(gboolean value)
+void context::set_backButtonLeavesApp(gboolean value)
 {
-    return unity_input_->set_backButtonLeavesApp(value);
+    return executor_->set_backButtonLeavesApp(value);
 }
 
-void unity_input_context::set_compensateSensors(gboolean value)
+void context::set_compensateSensors(gboolean value)
 {
-    return unity_input_->set_compensateSensors(value);
+    return executor_->set_compensateSensors(value);
 }
 
-void unity_input_context::set_eatKeyPressOnTextFieldFocus(gboolean value)
+void context::set_eatKeyPressOnTextFieldFocus(gboolean value)
 {
-    return unity_input_->set_eatKeyPressOnTextFieldFocus(value);
+    return executor_->set_eatKeyPressOnTextFieldFocus(value);
 }
 
-void unity_input_context::set_imeCompositionMode(MonoObject* value)
+void context::set_imeCompositionMode(MonoObject* value)
 {
-    return unity_input_->set_imeCompositionMode(value);
+    return executor_->set_imeCompositionMode(value);
 }
 
-void unity_input_context::set_multiTouchEnabled(gboolean value)
+void context::set_multiTouchEnabled(gboolean value)
 {
-    return unity_input_->set_multiTouchEnabled(value);
+    return executor_->set_multiTouchEnabled(value);
 }
 
-void unity_input_context::set_simulateMouseWithTouches(gboolean value)
+void context::set_simulateMouseWithTouches(gboolean value)
 {
-    return unity_input_->set_simulateMouseWithTouches(value);
+    return executor_->set_simulateMouseWithTouches(value);
 }
 
-
-gconstpointer unity_input_context::register_fn(char const *name, gconstpointer fn)
+gconstpointer context::register_function(char const *name, gconstpointer fn)
 {
-    if (false) {}
-    else if (!strcmp(name, "UnityEngine.Input::GetAxis"))
+    if (!strcmp(name, "UnityEngine.Input::GetAxis"))
     {
-        f_->GetAxis = reinterpret_cast<unity_input_functions_t::GetAxis_t>(fn);
-        return &unity_input_context::GetAxis;
+        functions_->GetAxis = reinterpret_cast<functions_t::GetAxis_t>(fn);
+        return &GetAxis;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetAxisRaw"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetAxisRaw"))
     {
-        f_->GetAxisRaw = reinterpret_cast<unity_input_functions_t::GetAxisRaw_t>(fn);
-        return &unity_input_context::GetAxisRaw;
+        functions_->GetAxisRaw = reinterpret_cast<functions_t::GetAxisRaw_t>(fn);
+        return &GetAxisRaw;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetButton"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetButton"))
     {
-        f_->GetButton = reinterpret_cast<unity_input_functions_t::GetButton_t>(fn);
-        return &unity_input_context::GetButton;
+        functions_->GetButton = reinterpret_cast<functions_t::GetButton_t>(fn);
+        return &GetButton;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetButtonUp"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetButtonUp"))
     {
-        f_->GetButtonUp = reinterpret_cast<unity_input_functions_t::GetButtonUp_t>(fn);
-        return &unity_input_context::GetButtonUp;
+        functions_->GetButtonUp = reinterpret_cast<functions_t::GetButtonUp_t>(fn);
+        return &GetButtonUp;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetButtonDown"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetButtonDown"))
     {
-        f_->GetButtonDown = reinterpret_cast<unity_input_functions_t::GetButtonDown_t>(fn);
-        return &unity_input_context::GetButtonDown;
+        functions_->GetButtonDown = reinterpret_cast<functions_t::GetButtonDown_t>(fn);
+        return &GetButtonDown;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetJoystickNames"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetJoystickNames"))
     {
-        f_->GetJoystickNames = reinterpret_cast<unity_input_functions_t::GetJoystickNames_t>(fn);
-        return &unity_input_context::GetJoystickNames;
+        functions_->GetJoystickNames = reinterpret_cast<functions_t::GetJoystickNames_t>(fn);
+        return &GetJoystickNames;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyDownInt"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyDownInt"))
     {
-        f_->GetKeyDownInt = reinterpret_cast<unity_input_functions_t::GetKeyDownInt_t>(fn);
-        return &unity_input_context::GetKeyDownInt;
+        functions_->GetKeyDownInt = reinterpret_cast<functions_t::GetKeyDownInt_t>(fn);
+        return &GetKeyDownInt;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyDownString"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyDownString"))
     {
-        f_->GetKeyDownString = reinterpret_cast<unity_input_functions_t::GetKeyDownString_t>(fn);
-        return &unity_input_context::GetKeyDownString;
+        functions_->GetKeyDownString = reinterpret_cast<functions_t::GetKeyDownString_t>(fn);
+        return &GetKeyDownString;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyInt"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyInt"))
     {
-        f_->GetKeyInt = reinterpret_cast<unity_input_functions_t::GetKeyInt_t>(fn);
-        return &unity_input_context::GetKeyInt;
+        functions_->GetKeyInt = reinterpret_cast<functions_t::GetKeyInt_t>(fn);
+        return &GetKeyInt;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyString"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyString"))
     {
-        f_->GetKeyString = reinterpret_cast<unity_input_functions_t::GetKeyString_t>(fn);
-        return &unity_input_context::GetKeyString;
+        functions_->GetKeyString = reinterpret_cast<functions_t::GetKeyString_t>(fn);
+        return &GetKeyString;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyUpInt"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyUpInt"))
     {
-        f_->GetKeyUpInt = reinterpret_cast<unity_input_functions_t::GetKeyUpInt_t>(fn);
-        return &unity_input_context::GetKeyUpInt;
+        functions_->GetKeyUpInt = reinterpret_cast<functions_t::GetKeyUpInt_t>(fn);
+        return &GetKeyUpInt;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetKeyUpString"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetKeyUpString"))
     {
-        f_->GetKeyUpString = reinterpret_cast<unity_input_functions_t::GetKeyUpString_t>(fn);
-        return &unity_input_context::GetKeyUpString;
+        functions_->GetKeyUpString = reinterpret_cast<functions_t::GetKeyUpString_t>(fn);
+        return &GetKeyUpString;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetMouseButton"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetMouseButton"))
     {
-        f_->GetMouseButton = reinterpret_cast<unity_input_functions_t::GetMouseButton_t>(fn);
-        return &unity_input_context::GetMouseButton;
+        functions_->GetMouseButton = reinterpret_cast<functions_t::GetMouseButton_t>(fn);
+        return &GetMouseButton;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetMouseButtonDown"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetMouseButtonDown"))
     {
-        f_->GetMouseButtonDown = reinterpret_cast<unity_input_functions_t::GetMouseButtonDown_t>(fn);
-        return &unity_input_context::GetMouseButtonDown;
+        functions_->GetMouseButtonDown = reinterpret_cast<functions_t::GetMouseButtonDown_t>(fn);
+        return &GetMouseButtonDown;
     }
-    else if (!strcmp(name, "UnityEngine.Input::GetMouseButtonUp"))
+
+    if (!strcmp(name, "UnityEngine.Input::GetMouseButtonUp"))
     {
-        f_->GetMouseButtonUp = reinterpret_cast<unity_input_functions_t::GetMouseButtonUp_t>(fn);
-        return &unity_input_context::GetMouseButtonUp;
+        functions_->GetMouseButtonUp = reinterpret_cast<functions_t::GetMouseButtonUp_t>(fn);
+        return &GetMouseButtonUp;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_CALL_GetAccelerationEvent"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_CALL_GetAccelerationEvent"))
     {
-        f_->INTERNAL_CALL_GetAccelerationEvent = reinterpret_cast<unity_input_functions_t::INTERNAL_CALL_GetAccelerationEvent_t>(fn);
-        return &unity_input_context::INTERNAL_CALL_GetAccelerationEvent;
+        functions_->INTERNAL_CALL_GetAccelerationEvent = reinterpret_cast<functions_t::INTERNAL_CALL_GetAccelerationEvent_t>(fn);
+        return &INTERNAL_CALL_GetAccelerationEvent;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_CALL_GetTouch"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_CALL_GetTouch"))
     {
-        f_->INTERNAL_CALL_GetTouch = reinterpret_cast<unity_input_functions_t::INTERNAL_CALL_GetTouch_t>(fn);
-        return &unity_input_context::INTERNAL_CALL_GetTouch;
+        functions_->INTERNAL_CALL_GetTouch = reinterpret_cast<functions_t::INTERNAL_CALL_GetTouch_t>(fn);
+        return &INTERNAL_CALL_GetTouch;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_acceleration"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_acceleration"))
     {
-        f_->INTERNAL_get_acceleration = reinterpret_cast<unity_input_functions_t::INTERNAL_get_acceleration_t>(fn);
-        return &unity_input_context::INTERNAL_get_acceleration;
+        functions_->INTERNAL_get_acceleration = reinterpret_cast<functions_t::INTERNAL_get_acceleration_t>(fn);
+        return &INTERNAL_get_acceleration;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_compositionCursorPos"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_compositionCursorPos"))
     {
-        f_->INTERNAL_get_compositionCursorPos = reinterpret_cast<unity_input_functions_t::INTERNAL_get_compositionCursorPos_t>(fn);
-        return &unity_input_context::INTERNAL_get_compositionCursorPos;
+        functions_->INTERNAL_get_compositionCursorPos = reinterpret_cast<functions_t::INTERNAL_get_compositionCursorPos_t>(fn);
+        return &INTERNAL_get_compositionCursorPos;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_mousePosition"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_mousePosition"))
     {
-        f_->INTERNAL_get_mousePosition = reinterpret_cast<unity_input_functions_t::INTERNAL_get_mousePosition_t>(fn);
-        return &unity_input_context::INTERNAL_get_mousePosition;
+        functions_->INTERNAL_get_mousePosition = reinterpret_cast<functions_t::INTERNAL_get_mousePosition_t>(fn);
+        return &INTERNAL_get_mousePosition;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_mouseScrollDelta"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_get_mouseScrollDelta"))
     {
-        f_->INTERNAL_get_mouseScrollDelta = reinterpret_cast<unity_input_functions_t::INTERNAL_get_mouseScrollDelta_t>(fn);
-        return &unity_input_context::INTERNAL_get_mouseScrollDelta;
+        functions_->INTERNAL_get_mouseScrollDelta = reinterpret_cast<functions_t::INTERNAL_get_mouseScrollDelta_t>(fn);
+        return &INTERNAL_get_mouseScrollDelta;
     }
-    else if (!strcmp(name, "UnityEngine.Input::INTERNAL_set_compositionCursorPos"))
+
+    if (!strcmp(name, "UnityEngine.Input::INTERNAL_set_compositionCursorPos"))
     {
-        f_->INTERNAL_set_compositionCursorPos = reinterpret_cast<unity_input_functions_t::INTERNAL_set_compositionCursorPos_t>(fn);
-        return &unity_input_context::INTERNAL_set_compositionCursorPos;
+        functions_->INTERNAL_set_compositionCursorPos = reinterpret_cast<functions_t::INTERNAL_set_compositionCursorPos_t>(fn);
+        return &INTERNAL_set_compositionCursorPos;
     }
-    else if (!strcmp(name, "UnityEngine.Input::ResetInputAxes"))
+
+    if (!strcmp(name, "UnityEngine.Input::ResetInputAxes"))
     {
-        f_->ResetInputAxes = reinterpret_cast<unity_input_functions_t::ResetInputAxes_t>(fn);
-        return &unity_input_context::ResetInputAxes;
+        functions_->ResetInputAxes = reinterpret_cast<functions_t::ResetInputAxes_t>(fn);
+        return &ResetInputAxes;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_deviceOrientation"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_deviceOrientation"))
     {
-        f_->get_deviceOrientation = reinterpret_cast<unity_input_functions_t::get_deviceOrientation_t>(fn);
-        return &unity_input_context::get_deviceOrientation;
+        functions_->get_deviceOrientation = reinterpret_cast<functions_t::get_deviceOrientation_t>(fn);
+        return &get_deviceOrientation;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_imeCompositionMode"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_imeCompositionMode"))
     {
-        f_->get_imeCompositionMode = reinterpret_cast<unity_input_functions_t::get_imeCompositionMode_t>(fn);
-        return &unity_input_context::get_imeCompositionMode;
+        functions_->get_imeCompositionMode = reinterpret_cast<functions_t::get_imeCompositionMode_t>(fn);
+        return &get_imeCompositionMode;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_accelerationEventCount"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_accelerationEventCount"))
     {
-        f_->get_accelerationEventCount = reinterpret_cast<unity_input_functions_t::get_accelerationEventCount_t>(fn);
-        return &unity_input_context::get_accelerationEventCount;
+        functions_->get_accelerationEventCount = reinterpret_cast<functions_t::get_accelerationEventCount_t>(fn);
+        return &get_accelerationEventCount;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_anyKey"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_anyKey"))
     {
-        f_->get_anyKey = reinterpret_cast<unity_input_functions_t::get_anyKey_t>(fn);
-        return &unity_input_context::get_anyKey;
+        functions_->get_anyKey = reinterpret_cast<functions_t::get_anyKey_t>(fn);
+        return &get_anyKey;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_anyKeyDown"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_anyKeyDown"))
     {
-        f_->get_anyKeyDown = reinterpret_cast<unity_input_functions_t::get_anyKeyDown_t>(fn);
-        return &unity_input_context::get_anyKeyDown;
+        functions_->get_anyKeyDown = reinterpret_cast<functions_t::get_anyKeyDown_t>(fn);
+        return &get_anyKeyDown;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_backButtonLeavesApp"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_backButtonLeavesApp"))
     {
-        f_->get_backButtonLeavesApp = reinterpret_cast<unity_input_functions_t::get_backButtonLeavesApp_t>(fn);
-        return &unity_input_context::get_backButtonLeavesApp;
+        functions_->get_backButtonLeavesApp = reinterpret_cast<functions_t::get_backButtonLeavesApp_t>(fn);
+        return &get_backButtonLeavesApp;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_compensateSensors"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_compensateSensors"))
     {
-        f_->get_compensateSensors = reinterpret_cast<unity_input_functions_t::get_compensateSensors_t>(fn);
-        return &unity_input_context::get_compensateSensors;
+        functions_->get_compensateSensors = reinterpret_cast<functions_t::get_compensateSensors_t>(fn);
+        return &get_compensateSensors;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_compositionString"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_compositionString"))
     {
-        f_->get_compositionString = reinterpret_cast<unity_input_functions_t::get_compositionString_t>(fn);
-        return &unity_input_context::get_compositionString;
+        functions_->get_compositionString = reinterpret_cast<functions_t::get_compositionString_t>(fn);
+        return &get_compositionString;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_eatKeyPressOnTextFieldFocus"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_eatKeyPressOnTextFieldFocus"))
     {
-        f_->get_eatKeyPressOnTextFieldFocus = reinterpret_cast<unity_input_functions_t::get_eatKeyPressOnTextFieldFocus_t>(fn);
-        return &unity_input_context::get_eatKeyPressOnTextFieldFocus;
+        functions_->get_eatKeyPressOnTextFieldFocus = reinterpret_cast<functions_t::get_eatKeyPressOnTextFieldFocus_t>(fn);
+        return &get_eatKeyPressOnTextFieldFocus;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_imeIsSelected"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_imeIsSelected"))
     {
-        f_->get_imeIsSelected = reinterpret_cast<unity_input_functions_t::get_imeIsSelected_t>(fn);
-        return &unity_input_context::get_imeIsSelected;
+        functions_->get_imeIsSelected = reinterpret_cast<functions_t::get_imeIsSelected_t>(fn);
+        return &get_imeIsSelected;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_inputString"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_inputString"))
     {
-        f_->get_inputString = reinterpret_cast<unity_input_functions_t::get_inputString_t>(fn);
-        return &unity_input_context::get_inputString;
+        functions_->get_inputString = reinterpret_cast<functions_t::get_inputString_t>(fn);
+        return &get_inputString;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_isGyroAvailable"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_isGyroAvailable"))
     {
-        f_->get_isGyroAvailable = reinterpret_cast<unity_input_functions_t::get_isGyroAvailable_t>(fn);
-        return &unity_input_context::get_isGyroAvailable;
+        functions_->get_isGyroAvailable = reinterpret_cast<functions_t::get_isGyroAvailable_t>(fn);
+        return &get_isGyroAvailable;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_mousePresent"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_mousePresent"))
     {
-        f_->get_mousePresent = reinterpret_cast<unity_input_functions_t::get_mousePresent_t>(fn);
-        return &unity_input_context::get_mousePresent;
+        functions_->get_mousePresent = reinterpret_cast<functions_t::get_mousePresent_t>(fn);
+        return &get_mousePresent;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_multiTouchEnabled"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_multiTouchEnabled"))
     {
-        f_->get_multiTouchEnabled = reinterpret_cast<unity_input_functions_t::get_multiTouchEnabled_t>(fn);
-        return &unity_input_context::get_multiTouchEnabled;
+        functions_->get_multiTouchEnabled = reinterpret_cast<functions_t::get_multiTouchEnabled_t>(fn);
+        return &get_multiTouchEnabled;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_simulateMouseWithTouches"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_simulateMouseWithTouches"))
     {
-        f_->get_simulateMouseWithTouches = reinterpret_cast<unity_input_functions_t::get_simulateMouseWithTouches_t>(fn);
-        return &unity_input_context::get_simulateMouseWithTouches;
+        functions_->get_simulateMouseWithTouches = reinterpret_cast<functions_t::get_simulateMouseWithTouches_t>(fn);
+        return &get_simulateMouseWithTouches;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_stylusTouchSupported"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_stylusTouchSupported"))
     {
-        f_->get_stylusTouchSupported = reinterpret_cast<unity_input_functions_t::get_stylusTouchSupported_t>(fn);
-        return &unity_input_context::get_stylusTouchSupported;
+        functions_->get_stylusTouchSupported = reinterpret_cast<functions_t::get_stylusTouchSupported_t>(fn);
+        return &get_stylusTouchSupported;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_touchCount"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_touchCount"))
     {
-        f_->get_touchCount = reinterpret_cast<unity_input_functions_t::get_touchCount_t>(fn);
-        return &unity_input_context::get_touchCount;
+        functions_->get_touchCount = reinterpret_cast<functions_t::get_touchCount_t>(fn);
+        return &get_touchCount;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_touchPressureSupported"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_touchPressureSupported"))
     {
-        f_->get_touchPressureSupported = reinterpret_cast<unity_input_functions_t::get_touchPressureSupported_t>(fn);
-        return &unity_input_context::get_touchPressureSupported;
+        functions_->get_touchPressureSupported = reinterpret_cast<functions_t::get_touchPressureSupported_t>(fn);
+        return &get_touchPressureSupported;
     }
-    else if (!strcmp(name, "UnityEngine.Input::get_touchSupported"))
+
+    if (!strcmp(name, "UnityEngine.Input::get_touchSupported"))
     {
-        f_->get_touchSupported = reinterpret_cast<unity_input_functions_t::get_touchSupported_t>(fn);
-        return &unity_input_context::get_touchSupported;
+        functions_->get_touchSupported = reinterpret_cast<functions_t::get_touchSupported_t>(fn);
+        return &get_touchSupported;
     }
-    else if (!strcmp(name, "UnityEngine.Input::mainGyroIndex_Internal"))
+
+    if (!strcmp(name, "UnityEngine.Input::mainGyroIndex_Internal"))
     {
-        f_->mainGyroIndex_Internal = reinterpret_cast<unity_input_functions_t::mainGyroIndex_Internal_t>(fn);
-        return &unity_input_context::mainGyroIndex_Internal;
+        functions_->mainGyroIndex_Internal = reinterpret_cast<functions_t::mainGyroIndex_Internal_t>(fn);
+        return &mainGyroIndex_Internal;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_backButtonLeavesApp"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_backButtonLeavesApp"))
     {
-        f_->set_backButtonLeavesApp = reinterpret_cast<unity_input_functions_t::set_backButtonLeavesApp_t>(fn);
-        return &unity_input_context::set_backButtonLeavesApp;
+        functions_->set_backButtonLeavesApp = reinterpret_cast<functions_t::set_backButtonLeavesApp_t>(fn);
+        return &set_backButtonLeavesApp;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_compensateSensors"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_compensateSensors"))
     {
-        f_->set_compensateSensors = reinterpret_cast<unity_input_functions_t::set_compensateSensors_t>(fn);
-        return &unity_input_context::set_compensateSensors;
+        functions_->set_compensateSensors = reinterpret_cast<functions_t::set_compensateSensors_t>(fn);
+        return &set_compensateSensors;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_eatKeyPressOnTextFieldFocus"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_eatKeyPressOnTextFieldFocus"))
     {
-        f_->set_eatKeyPressOnTextFieldFocus = reinterpret_cast<unity_input_functions_t::set_eatKeyPressOnTextFieldFocus_t>(fn);
-        return &unity_input_context::set_eatKeyPressOnTextFieldFocus;
+        functions_->set_eatKeyPressOnTextFieldFocus = reinterpret_cast<functions_t::set_eatKeyPressOnTextFieldFocus_t>(fn);
+        return &set_eatKeyPressOnTextFieldFocus;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_imeCompositionMode"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_imeCompositionMode"))
     {
-        f_->set_imeCompositionMode = reinterpret_cast<unity_input_functions_t::set_imeCompositionMode_t>(fn);
-        return &unity_input_context::set_imeCompositionMode;
+        functions_->set_imeCompositionMode = reinterpret_cast<functions_t::set_imeCompositionMode_t>(fn);
+        return &set_imeCompositionMode;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_multiTouchEnabled"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_multiTouchEnabled"))
     {
-        f_->set_multiTouchEnabled = reinterpret_cast<unity_input_functions_t::set_multiTouchEnabled_t>(fn);
-        return &unity_input_context::set_multiTouchEnabled;
+        functions_->set_multiTouchEnabled = reinterpret_cast<functions_t::set_multiTouchEnabled_t>(fn);
+        return &set_multiTouchEnabled;
     }
-    else if (!strcmp(name, "UnityEngine.Input::set_simulateMouseWithTouches"))
+
+    if (!strcmp(name, "UnityEngine.Input::set_simulateMouseWithTouches"))
     {
-        f_->set_simulateMouseWithTouches = reinterpret_cast<unity_input_functions_t::set_simulateMouseWithTouches_t>(fn);
-        return &unity_input_context::set_simulateMouseWithTouches;
+        functions_->set_simulateMouseWithTouches = reinterpret_cast<functions_t::set_simulateMouseWithTouches_t>(fn);
+        return &set_simulateMouseWithTouches;
     }
-    else
-    {
-        return nullptr;
-    }
+
+    return nullptr;
 }
+
+} // namespace unity_input

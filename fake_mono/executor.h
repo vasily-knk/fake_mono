@@ -1,6 +1,8 @@
 #pragma once
 
 #include "mono_wrapper/types.h"
+#include "mono_wrapper/mono_wrapper_fwd.h"
+#include "fake_mono_fwd.h"
 
 struct executor
 {
@@ -224,4 +226,4 @@ struct executor
     virtual gint64 mono_gc_get_heap_size() = 0;
 };
 
-executor_ptr create_executor(mono_wrapper::functions_cptr);
+executor_ptr create_executor();
