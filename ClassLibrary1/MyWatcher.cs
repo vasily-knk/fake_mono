@@ -48,9 +48,11 @@ namespace ClassLibrary1
     {
         private int _numReports = 0;
         private long _frame = 0;
-        private Dictionary<long, ObjectData> _currentObjects = new Dictionary<long, ObjectData>();
         private List<Delta> _deltas = new List<Delta>();
         private readonly Stopwatch _stopwatch = new Stopwatch();
+
+        HashSet<long> _prevOjects = new HashSet<long>();
+        private WeakReference[] _objectsCache = {};
 
         public static GameObject CreateObject()
         {
@@ -78,25 +80,17 @@ namespace ClassLibrary1
         {
             _stopwatch.Start();
 
-            var newObjects = FindObjectsOfType<GameObject>();
-            var newObjectIDs = newObjects.Select(idForObject);
-            var removedIDs = _currentObjects.Select(r => r.Key).Except(newObjectIDs);
+            if (_frame%10 == 0)
+                UpdateObjectsCache();
 
-            var createdObjects = newObjects
-                .Where(o => !_currentObjects.ContainsKey(idForObject(o)))
-                .Select(o => new KeyValuePair<long, ObjectData>(idForObject(o), new ObjectData(o)));
+            var currentObjects = _objectsCache
+                .Where(w => w.IsAlive)
+                .Select(w => w.Target as GameObject);
 
-            var keptObjects = newObjects
-                .Where(o => _currentObjects.ContainsKey(idForObject(o)));
-
-            var deltasPos = keptObjects
-                .Where(o => ObjectDataOps.ExtractPos(o) != _currentObjects[idForObject(o)].Pos)
-                .Select(o => new KeyValuePair<long, Vector3>(idForObject(o), ObjectDataOps.ExtractPos(o)));
-
-            _deltas.Add(new Delta(createdObjects.ToArray(), removedIDs.ToArray(), deltasPos.ToArray()));
-
-            _currentObjects = newObjects.ToDictionary(idForObject, o => new ObjectData(o));
-
+            var objectsData = currentObjects
+                .Select(o => new ObjectData(o))
+                .ToArray();
+            
             ++_frame;
             _stopwatch.Stop();
 
@@ -110,6 +104,12 @@ namespace ClassLibrary1
                 PrintObjects();
                 ++_numReports;
             }
+        }
+
+        private void UpdateObjectsCache()
+        {
+            var foundObjects = FindObjectsOfType<GameObject>();
+            _objectsCache = foundObjects.Select(o => new WeakReference(o)).ToArray();
         }
 
         private void PrintObjects()

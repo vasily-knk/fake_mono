@@ -85,6 +85,7 @@ Global
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Win32.ActiveCfg = Release|Any CPU
+		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|Win32.Build.0 = Release|Any CPU
 		{CECCEF6C-D39B-4463-89BC-7C6EC3518846}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
