@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using System.Linq;
+using System.Threading;
 
 
 namespace ClassLibrary1
@@ -16,8 +17,8 @@ namespace ClassLibrary1
             return o.transform.position;
         }
     }
-    
-    struct ObjectData
+
+    public struct ObjectData
     {
         public readonly String Name;
         public readonly Vector3 Pos;
@@ -43,6 +44,18 @@ namespace ClassLibrary1
         }
     }
 
+    public struct TempStruct
+    {
+        public readonly int i;
+        public readonly float f;
+
+        public TempStruct(int i, float f)
+        {
+            this.i = i;
+            this.f = f;
+        }
+    }
+
     public class MyWatcher
         : MonoBehaviour
     {
@@ -50,6 +63,9 @@ namespace ClassLibrary1
         private long _frame = 0;
         private List<Delta> _deltas = new List<Delta>();
         private readonly Stopwatch _stopwatch = new Stopwatch();
+        private bool _slideshow = false;
+
+        private FrameRegister _frameRegister = new FrameRegister(RegisterNewFrame);
 
         HashSet<long> _prevOjects = new HashSet<long>();
         private WeakReference[] _objectsCache = {};
@@ -63,6 +79,9 @@ namespace ClassLibrary1
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public static extern void OnObjectDestroying(GameObject o);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public static extern void ReportMe(TempStruct s);
 
         void Start()
         {
@@ -90,6 +109,8 @@ namespace ClassLibrary1
             var objectsData = currentObjects
                 .Select(o => new ObjectData(o))
                 .ToArray();
+
+            _frameRegister.Invoke(objectsData);
             
             ++_frame;
             _stopwatch.Stop();
@@ -97,12 +118,28 @@ namespace ClassLibrary1
             updateFPS();
         }
 
+        private static void BeSlow()
+        {
+            //Thread.Sleep(1000);
+            Class1.Print("Hello!\n");
+        }
+
+
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
-                PrintObjects();
-                ++_numReports;
+                Destroy(gameObject);
+            }
+        }
+
+        private delegate void FrameRegister(ObjectData[] data);
+        
+        private static void RegisterNewFrame(ObjectData[] data)
+        {
+            foreach (var d in data)
+            {
+                
             }
         }
 
