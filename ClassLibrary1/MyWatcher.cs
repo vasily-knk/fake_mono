@@ -65,6 +65,8 @@ namespace ClassLibrary1
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private bool _slideshow = false;
 
+        private int _objectsUpdateRate = 1;
+
         private FrameRegister _frameRegister = new FrameRegister(RegisterNewFrame);
 
         HashSet<long> _prevOjects = new HashSet<long>();
@@ -97,23 +99,31 @@ namespace ClassLibrary1
 
         void FixedUpdate()
         {
-            _stopwatch.Start();
+            using (new StopwatchWrapper(_stopwatch))
+            {
+                if (_frame % _objectsUpdateRate == 0)
+                    UpdateObjectsCache();
 
-            if (_frame%10 == 0)
-                UpdateObjectsCache();
+                var objectsData = new ObjectData[_objectsCache.Length];
+                for (int i = 0; i < _objectsCache.Length; ++i)
+                {
+                    if (_objectsCache[i].IsAlive)
+                        objectsData[i] = new ObjectData(_objectsCache[i].Target as GameObject);
+                }
 
-            var currentObjects = _objectsCache
-                .Where(w => w.IsAlive)
-                .Select(w => w.Target as GameObject);
 
-            var objectsData = currentObjects
-                .Select(o => new ObjectData(o))
-                .ToArray();
+                //            var currentObjects = _objectsCache
+                //                .Where(w => w.IsAlive)
+                //                .Select(w => w.Target as GameObject);
+                //
+                //            var objectsData = currentObjects
+                //                .Select(o => new ObjectData(o))
+                //                .ToArray();
 
-            _frameRegister.Invoke(objectsData);
-            
-            ++_frame;
-            _stopwatch.Stop();
+                //_frameRegister.Invoke(objectsData);
+
+                ++_frame;
+            }
 
             updateFPS();
         }
@@ -127,10 +137,25 @@ namespace ClassLibrary1
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.L))
+                Destroy(gameObject);
+
+            bool printUpdateRate = false;
             if (Input.GetKeyDown(KeyCode.O))
             {
-                Destroy(gameObject);
+                if (_objectsUpdateRate > 1)
+                    _objectsUpdateRate /= 2;
+                printUpdateRate = true;
             }
+            
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                _objectsUpdateRate *= 2;
+                printUpdateRate = true;
+            }
+
+            if (printUpdateRate)
+                Class1.Print(String.Format("Objects update rate: {0}", _objectsUpdateRate));
         }
 
         private delegate void FrameRegister(ObjectData[] data);
