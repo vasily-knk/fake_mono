@@ -19,4 +19,5 @@ namespace mono_wrapper
     typedef shared_ptr<GameObject> GameObject_ptr;
     struct Transform;
     typedef shared_ptr<Transform> Transform_ptr;
+    struct Vector3;
 }

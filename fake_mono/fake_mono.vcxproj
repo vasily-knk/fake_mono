@@ -103,6 +103,7 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     <ClInclude Include="log.h" />
     <ClInclude Include="monitor.h" />
     <ClInclude Include="stats.h" />
+    <ClInclude Include="stats_manager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="unity_input_context.h" />
     <ClInclude Include="unity_input_executor.h" />
@@ -124,6 +125,7 @@ copy $(OutDir)$(TargetName).pdb $(UnityGameDir)$(UnityGameName)_Data\Mono\mono.p
     <ClCompile Include="fake_mono.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="monitor.cpp" />
+    <ClCompile Include="stats_manager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

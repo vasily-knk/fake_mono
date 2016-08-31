@@ -25,6 +25,7 @@
     <ClInclude Include="mono_wrapper\String.h" />
     <ClInclude Include="mono_wrapper\Transform.h" />
     <ClInclude Include="mono_wrapper\types.h" />
+    <ClInclude Include="mono_wrapper\Vector3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8A3F1D6D-CB32-4B40-B336-5929249709C5}</ProjectGuid>

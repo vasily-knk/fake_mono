@@ -57,5 +57,8 @@
     <ClInclude Include="mono_wrapper\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mono_wrapper\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

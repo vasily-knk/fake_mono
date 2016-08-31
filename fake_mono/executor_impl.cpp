@@ -11,7 +11,8 @@
 
 #include "unity_input_context.h"
 #include "function_defs.h"
-
+#include "mono_wrapper/Vector3.h"
+#include "stats_manager.h"
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
 
@@ -29,12 +30,10 @@ namespace transform_detail
 
         auto f = mono_functions();
 
-        auto tr = mono_wrapper::wrap_Transform(f, self);
-        auto go = tr->get_gameObject();
-        auto nm = go->get_name();
-        char const *name = nm->to_utf8();
+        auto self_ptr = mono_wrapper::wrap_Transform(f, self);
+        auto value_vec3 = reinterpret_cast<mono_wrapper::Vector3 const *>(value);
 
-        int32_t id = go->GetInstanceID();
+        stats_manager_instance()->set_position(self_ptr, value_vec3);
 
         return real_function(self, value);
     }
