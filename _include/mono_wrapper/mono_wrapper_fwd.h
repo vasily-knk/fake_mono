@@ -14,6 +14,8 @@ namespace mono_wrapper
     typedef shared_ptr<String> String_ptr;
     struct Array;
     typedef shared_ptr<Array> Array_ptr;
+    struct Struct;
+    typedef shared_ptr<Struct> Struct_ptr;
 
     struct GameObject;
     typedef shared_ptr<GameObject> GameObject_ptr;

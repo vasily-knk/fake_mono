@@ -13,6 +13,7 @@
 #include "function_defs.h"
 #include "mono_wrapper/Vector3.h"
 #include "stats_manager.h"
+#include "mono_wrapper/Struct.h"
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
 
@@ -22,20 +23,28 @@ mono_wrapper::functions_cptr mono_functions();
 namespace transform_detail
 {
     gconstpointer real_set_position = nullptr;
+    gconstpointer real_create_gameobject = nullptr;
 
-    void set_position(MonoObject *self, MonoObject *value)
+    void set_position(MonoObject *self, mono_wrapper::Vector3 *value)
     {
-        typedef void(__cdecl *f_t)(MonoObject *, MonoObject *);
+        typedef void(__cdecl * f_t)(MonoObject *, mono_wrapper::Vector3 *);
         auto real_function = reinterpret_cast<f_t>(real_set_position);
 
         auto f = mono_functions();
-
         auto self_ptr = mono_wrapper::wrap_Transform(f, self);
-        auto value_vec3 = reinterpret_cast<mono_wrapper::Vector3 const *>(value);
+        stats_manager_instance()->set_position(self_ptr, value);
+        real_function(self, value);
+    }
 
-        stats_manager_instance()->set_position(self_ptr, value_vec3);
+    void create_gameobject(MonoObject *go, MonoObject *name)
+    {
+        typedef void(__cdecl * f_t)(MonoObject *, MonoObject *);
+        auto real_function = reinterpret_cast<f_t>(real_create_gameobject);
 
-        return real_function(self, value);
+        auto f = mono_functions();
+        real_function(go, name);
+        auto go_ptr = mono_wrapper::wrap_GameObject(f, go);
+        stats_manager_instance()->create_gameobject(go_ptr);
     }
 
 } // namespace transform_detail
@@ -88,6 +97,11 @@ void executor_impl::mono_add_internal_call(const char* name, gconstpointer metho
     {
         transform_detail::real_set_position = method;
         new_method = transform_detail::set_position;
+    }
+    else if (!strcmp(name, "UnityEngine.GameObject::Internal_CreateGameObject"))
+    {
+        transform_detail::real_create_gameobject = method;
+        new_method = transform_detail::create_gameobject;
     }
     
     

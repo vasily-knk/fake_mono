@@ -3,6 +3,7 @@
 #include "mono_wrapper/Transform.h"
 #include "mono_wrapper/GameObject.h"
 #include "mono_wrapper/Vector3.h"
+#include "mono_wrapper/Struct.h"
 
 namespace mono_wrapper
 {
@@ -11,11 +12,11 @@ Transform_impl::Transform_impl(functions_cptr f, MonoObject *p)
     : super_(f, p)
 {}
 
-Object_ptr Transform_impl::get_position() 
+Struct_ptr Transform_impl::get_position() 
 {
     MonoMethod *m = base().get_getter("position");
     auto result = base().invoke_method(m, nullptr);
-    return wrap_Object(base().get_f(), result); 
+    return wrap_Struct(base().get_f(), result); 
 }
 
 GameObject_ptr Transform_impl::get_gameObject()

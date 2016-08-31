@@ -36,7 +36,7 @@ struct MonoCustomAttrInfo;
 
 struct MonoReflectionType { UInt32 offset[2]; MonoType* type;};
 
-typedef const void* gconstpointer;
+typedef void* gconstpointer;
 typedef void* gpointer;
 typedef int gboolean;
 typedef unsigned int guint32;

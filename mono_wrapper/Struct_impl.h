@@ -1,22 +1,20 @@
 #pragma once
 
 #include "stdafx.h"
-#include "mono_wrapper/Transform.h"
+#include "mono_wrapper/Struct.h"
 
 #include "Object_impl.h"
 
 namespace mono_wrapper
 {
 
-struct Transform_impl
-    : Transform
+struct Struct_impl
+    : Struct
 {
-    Transform_impl(functions_cptr f, MonoObject *p);
+    Struct_impl(functions_cptr f, MonoObject *p);
     
-    // Transform
 public:
-    Struct_ptr get_position() override;
-    GameObject_ptr get_gameObject() override;
+    void const *raw_ptr() const override;
 
     // Object
 public:
