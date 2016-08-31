@@ -17,6 +17,7 @@ struct GameObject_impl
 public:
     String_ptr get_name() override;
     Transform_ptr get_transform() override;
+    int32_t GetInstanceID() override;
 
     // Object
 public:

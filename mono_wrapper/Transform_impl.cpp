@@ -2,6 +2,7 @@
 #include "Transform_impl.h"
 #include "mono_wrapper/String.h"
 #include "mono_wrapper/Transform.h"
+#include "mono_wrapper/GameObject.h"
 
 namespace mono_wrapper
 {
@@ -16,6 +17,11 @@ Object_ptr Transform_impl::get_position()
     return wrap_Transform(base().get_f(), base().invoke_method(m, nullptr));
 }
 
+GameObject_ptr Transform_impl::get_gameObject()
+{
+    MonoMethod *m = base().get_getter("gameObject");
+    return wrap_GameObject(base().get_f(), base().invoke_method(m, nullptr));
+}
 
 String_ptr  Transform_impl::ToString       ()               { return super_.ToString()       ; }
 bool        Transform_impl::Equals         (Object_ptr obj) { return super_.Equals(obj)      ; }

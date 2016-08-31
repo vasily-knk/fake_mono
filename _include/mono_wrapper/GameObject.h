@@ -10,6 +10,7 @@ struct GameObject
 {
     virtual String_ptr get_name() = 0;
     virtual Transform_ptr get_transform() = 0;
+    virtual int32_t GetInstanceID() = 0;
 };
 
 GameObject_ptr wrap_GameObject(functions_cptr f, MonoObject *p);

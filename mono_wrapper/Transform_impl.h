@@ -16,7 +16,7 @@ struct Transform_impl
     // Transform
 public:
     Object_ptr get_position() override;
-
+    GameObject_ptr get_gameObject() override;
 
     // Object
 public:

@@ -10,11 +10,36 @@
 #include "mono_wrapper/Transform.h"
 
 #include "unity_input_context.h"
+#include "function_defs.h"
 
 
 std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
 
 mono_wrapper::functions_cptr mono_functions();
+
+
+namespace transform_detail
+{
+    gconstpointer real_set_position = nullptr;
+
+    void set_position(MonoObject *self, MonoObject *value)
+    {
+        typedef void(__cdecl *f_t)(MonoObject *, MonoObject *);
+        auto real_function = reinterpret_cast<f_t>(real_set_position);
+
+        auto f = mono_functions();
+
+        auto tr = mono_wrapper::wrap_Transform(f, self);
+        auto go = tr->get_gameObject();
+        auto nm = go->get_name();
+        char const *name = nm->to_utf8();
+
+        int32_t id = go->GetInstanceID();
+
+        return real_function(self, value);
+    }
+
+} // namespace transform_detail
 
 
 executor_ptr create_executor()
@@ -56,10 +81,17 @@ void executor_impl::mono_add_internal_call(const char* name, gconstpointer metho
 {
     log_stream() << "Internal method: " << name << std::endl;
 
-    gconstpointer new_method = unity_input::context::register_function(name, method);
-    if (!new_method)
-        new_method = method;
-
+    gconstpointer new_method = method;
+    
+    if (auto m = unity_input::context::register_function(name, method))
+        new_method = m;
+    else if (!strcmp(name, "UnityEngine.Transform::INTERNAL_set_position"))
+    {
+        transform_detail::real_set_position = method;
+        new_method = transform_detail::set_position;
+    }
+    
+    
     executor_base::mono_add_internal_call(name, new_method);
 }
 
@@ -270,3 +302,5 @@ void executor_impl::internal_print(MonoString *str)
     OutputDebugStringA(cstr);
     log_stream() << cstr << std::flush;
 }
+
+

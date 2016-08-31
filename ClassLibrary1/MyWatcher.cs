@@ -20,12 +20,18 @@ namespace ClassLibrary1
 
     public struct ObjectData
     {
-        public readonly String Name;
-        public readonly Vector3 Pos;
+        public int Id;
+        public Vector3 Pos;
 
         public ObjectData(GameObject o)
         {
-            Name = o.name;
+            Id = o.GetInstanceID();
+            Pos = ObjectDataOps.ExtractPos(o);
+        }
+
+        public void Fill(GameObject o)
+        {
+            Id = o.GetInstanceID();
             Pos = ObjectDataOps.ExtractPos(o);
         }
     }
@@ -61,16 +67,14 @@ namespace ClassLibrary1
     {
         private int _numReports = 0;
         private long _frame = 0;
-        private List<Delta> _deltas = new List<Delta>();
-        private readonly Stopwatch _stopwatch = new Stopwatch();
-        private bool _slideshow = false;
+        private readonly Stopwatch _profilerTotal = new Stopwatch();
+        private readonly Stopwatch _profilerRetrieval = new Stopwatch();
+        private readonly Stopwatch _profilerProcessing = new Stopwatch();
+        private int _objectsUpdateRate = 16;
 
-        private int _objectsUpdateRate = 1;
-
-        private FrameRegister _frameRegister = new FrameRegister(RegisterNewFrame);
-
-        HashSet<long> _prevOjects = new HashSet<long>();
         private WeakReference[] _objectsCache = {};
+        private ObjectData[] _objectDatas = {};
+        private int _numObjectDatas = 0;
 
         public static GameObject CreateObject()
         {
@@ -99,28 +103,38 @@ namespace ClassLibrary1
 
         void FixedUpdate()
         {
-            using (new StopwatchWrapper(_stopwatch))
+            using (new StopwatchWrapper(_profilerTotal))
             {
-                if (_frame % _objectsUpdateRate == 0)
-                    UpdateObjectsCache();
-
-                var objectsData = new ObjectData[_objectsCache.Length];
-                for (int i = 0; i < _objectsCache.Length; ++i)
+                using (new StopwatchWrapper(_profilerRetrieval))
                 {
-                    if (_objectsCache[i].IsAlive)
-                        objectsData[i] = new ObjectData(_objectsCache[i].Target as GameObject);
+                    if (_frame%_objectsUpdateRate == 0)
+                        UpdateObjectsCache();
                 }
 
+                using (new StopwatchWrapper(_profilerProcessing))
+                {
+                    if (_objectDatas.Length < _objectsCache.Length)
+                    {
+                        int newSize = 1;
+                        for (; newSize < _objectsCache.Length; newSize *= 2) { }
 
-                //            var currentObjects = _objectsCache
-                //                .Where(w => w.IsAlive)
-                //                .Select(w => w.Target as GameObject);
-                //
-                //            var objectsData = currentObjects
-                //                .Select(o => new ObjectData(o))
-                //                .ToArray();
+                        Class1.Print(String.Format("Resizing array to {0}\n", newSize));
+                        _objectDatas = new ObjectData[newSize];
+                    }
 
-                //_frameRegister.Invoke(objectsData);
+                    int i = 0;
+
+                    foreach (var w in _objectsCache)
+                    {
+                        if (w.IsAlive)
+                        {
+                            _objectDatas[i].Fill(w.Target as GameObject);
+                            ++i;
+                        }
+                    }
+
+                    _numObjectDatas = i;
+                }
 
                 ++_frame;
             }
@@ -155,18 +169,9 @@ namespace ClassLibrary1
             }
 
             if (printUpdateRate)
-                Class1.Print(String.Format("Objects update rate: {0}", _objectsUpdateRate));
+                Class1.Print(String.Format("Objects update rate: {0}\n", _objectsUpdateRate));
         }
 
-        private delegate void FrameRegister(ObjectData[] data);
-        
-        private static void RegisterNewFrame(ObjectData[] data)
-        {
-            foreach (var d in data)
-            {
-                
-            }
-        }
 
         private void UpdateObjectsCache()
         {
@@ -207,12 +212,23 @@ namespace ClassLibrary1
             const int numFrames = 60;
             if (_frame % numFrames == 0)
             {
-                var avgTicks = _stopwatch.Elapsed.Ticks / numFrames;
-                var avgMicrosecs = avgTicks / 10;
-                Class1.Print(String.Format("\nAvg FixedUpdate time: {0}\nDeltas: {1}\n", avgMicrosecs, _deltas.Count));
-                _stopwatch.Reset();
+                var s = new StringBuilder();
+                s.Append("Stats:\n")
+                    .AppendFormat("   Retrival  : {0}\n", getAvgProfMicrosecs(_profilerRetrieval , numFrames))
+                    .AppendFormat("   Processing: {0}\n", getAvgProfMicrosecs(_profilerProcessing, numFrames))
+                    .AppendFormat("   Total     : {0}\n", getAvgProfMicrosecs(_profilerTotal     , numFrames))
+                    ;
+
+                Class1.Print(s.ToString());
             }
         }
 
+        private long getAvgProfMicrosecs(Stopwatch prof, int numFrames)
+        {
+            var avgTicks = prof.Elapsed.Ticks / numFrames;
+            var avgMicrosecs = avgTicks / 10;
+            prof.Reset();
+            return avgMicrosecs;
+        }
     }
 }

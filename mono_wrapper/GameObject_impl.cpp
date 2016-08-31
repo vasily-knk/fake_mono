@@ -22,6 +22,13 @@ Transform_ptr GameObject_impl::get_transform()
     return wrap_Transform(base().get_f(), base().invoke_method(m, nullptr));
 }
 
+int32_t GameObject_impl::GetInstanceID() 
+{
+    MonoMethod *m = base().get_method("GetInstanceID", 0);
+
+    return base().unbox<int32_t>(base().invoke_method(m, nullptr));
+}
+
 
 String_ptr  GameObject_impl::ToString       ()               { return super_.ToString()       ; }
 bool        GameObject_impl::Equals         (Object_ptr obj) { return super_.Equals(obj)      ; }
