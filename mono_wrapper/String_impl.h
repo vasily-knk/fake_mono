@@ -9,7 +9,8 @@ namespace mono_wrapper
 {
 
 struct String_impl
-    : String
+    : virtual Object_impl
+    , virtual String
 {
     String_impl(functions_cptr f, MonoObject *p);
     
@@ -20,19 +21,6 @@ public:
 
 public:
     char const *to_utf8() const override;
-
-    // Object
-public:
-    String_ptr ToString()               override;
-    bool Equals(Object_ptr obj)         override;
-    MonoObject *get_mono_object() const override;
-    char const *get_class_name() const override;
-
-public:
-    object_base const &base() const;
-
-private:
-    Object_impl super_;
 };
 
 

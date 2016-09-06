@@ -9,6 +9,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link />
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

@@ -9,7 +9,8 @@ namespace mono_wrapper
 {
 
 struct Transform_impl
-    : Transform
+    : virtual Object_impl
+    , virtual Transform
 {
     Transform_impl(functions_cptr f, MonoObject *p);
     
@@ -17,19 +18,6 @@ struct Transform_impl
 public:
     Struct_ptr get_position() override;
     GameObject_ptr get_gameObject() override;
-
-    // Object
-public:
-    String_ptr ToString()               override;
-    bool Equals(Object_ptr obj)         override;
-    MonoObject *get_mono_object() const override;
-    char const *get_class_name() const override;
-
-public:
-    object_base const &base() const;
-
-private:
-    Object_impl super_;
 };
 
 

@@ -6,7 +6,7 @@ namespace mono_wrapper
 {
 
 struct Transform
-    : Object
+    : virtual Object
 {
     virtual Struct_ptr get_position() = 0;
     virtual GameObject_ptr get_gameObject() = 0;

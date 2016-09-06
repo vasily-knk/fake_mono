@@ -6,7 +6,7 @@ namespace mono_wrapper
 {
 
 struct Struct
-    : Object
+    : virtual Object
 {
     virtual void const *raw_ptr() const = 0;
 

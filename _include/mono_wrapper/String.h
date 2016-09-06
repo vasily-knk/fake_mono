@@ -6,7 +6,7 @@ namespace mono_wrapper
 {
 
 struct String
-    : Object
+    : virtual Object
 {
     virtual int32_t get_Length() = 0;
     virtual String_ptr ToUpper() = 0;
