@@ -33,9 +33,6 @@
     <ClInclude Include="executor_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="monitor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,9 +78,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="executor_impl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="unity_input_context.cpp">

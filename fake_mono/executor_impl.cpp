@@ -2,7 +2,6 @@
 #include "executor_impl.h"
 #include "log.h"
 #include "common/stl_helpers.h"
-#include "monitor.h"
 
 #include "mono_wrapper/Array.h"
 #include "mono_wrapper/String.h"
@@ -66,6 +65,19 @@ void executor_impl::init(MonoDomain *domain)
     main_thread_id_ = std::make_shared<boost::thread::id>(boost::this_thread::get_id());
 }
 
+
+void executor_impl::init_debugger()
+{
+//	const char* options[] =
+//	{
+//		//"--help",
+//		//"--soft-breakpoints",
+//		"--debugger-agent=transport=dt_socket,address=127.0.0.1:10000"
+//	};
+//	executor_base::mono_jit_parse_options(sizeof(options) / sizeof(char*), (char**)options);
+//	executor_base::mono_debug_init(1);
+}
+
 MonoThread* executor_impl::mono_thread_attach(MonoDomain* domain) 
 {
     return executor_base::mono_thread_attach(domain);
@@ -73,14 +85,16 @@ MonoThread* executor_impl::mono_thread_attach(MonoDomain* domain)
 
 MonoDomain* executor_impl::mono_jit_init(const char* file)
 {
-    auto domain = executor_base::mono_jit_init(file);
+	init_debugger();
+	auto domain = executor_base::mono_jit_init(file);
     init(domain);
     return domain;
 }
 
 MonoDomain* executor_impl::mono_jit_init_version(const char* file, const char* runtime_version)
 {
-    auto domain = executor_base::mono_jit_init_version(file, runtime_version);
+	init_debugger();
+	auto domain = executor_base::mono_jit_init_version(file, runtime_version);
     init(domain);
     return domain;
 }

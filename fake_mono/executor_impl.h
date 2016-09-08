@@ -26,6 +26,7 @@ public:
 private:
     void init(MonoDomain *domain);
     void init_watcher_impl();
+	void init_debugger();
 
 private:
     struct watcher_data_t;

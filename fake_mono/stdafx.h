@@ -12,7 +12,6 @@
 
 #include "common/stl.h"
 #include "common/boost.h"
-#include "common/qt.h"
 
 #include <boost/asio.hpp>
 using boost::asio::io_service;
