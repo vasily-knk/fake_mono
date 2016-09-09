@@ -235,6 +235,7 @@ functions_t load_mono_functions_from_dll(HMODULE dll)
     result.mono_profiler_install_allocation = reinterpret_cast<functions_t::mono_profiler_install_allocation_t>(GetProcAddress(dll, "mono_profiler_install_allocation"));
     result.mono_profiler_install_jit_end = reinterpret_cast<functions_t::mono_profiler_install_jit_end_t>(GetProcAddress(dll, "mono_profiler_install_jit_end"));
     result.mono_profiler_install_exception = reinterpret_cast<functions_t::mono_profiler_install_exception_t>(GetProcAddress(dll, "mono_profiler_install_exception"));
+    result.mono_profiler_install_thread = reinterpret_cast<functions_t::mono_profiler_install_thread_t>(GetProcAddress(dll, "mono_profiler_install_thread"));
     
     return result;
 }

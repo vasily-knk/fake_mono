@@ -1151,3 +1151,8 @@ void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, Mo
     return executor_instance()->mono_profiler_install_exception(throw_callback, exc_method_leave, clause_callback);
 }
 
+void mono_profiler_install_thread(MonoProfileThreadFunc start, MonoProfileThreadFunc end)
+{
+    return executor_instance()->mono_profiler_install_thread(start, end);
+}
+

@@ -172,6 +172,7 @@ typedef void (*MonoProfileAllocFunc)      (MonoProfiler *prof, MonoObject *obj, 
 typedef void (*MonoProfileJitResult)      (MonoProfiler *prof, MonoMethod   *method,   MonoJitInfo* jinfo,   int result);
 typedef void (*MonoProfileExceptionFunc) (MonoProfiler *prof, MonoObject *object);
 typedef void (*MonoProfileExceptionClauseFunc) (MonoProfiler *prof, MonoMethod *method, int clause_type, int clause_num);
+typedef void (*MonoProfileThreadFunc)     (MonoProfiler *prof, uint32_t tid);
 
 
 } // namespace types

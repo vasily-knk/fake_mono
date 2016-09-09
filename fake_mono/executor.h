@@ -236,6 +236,7 @@ struct executor
     virtual void mono_profiler_install_allocation(MonoProfileAllocFunc callback) = 0;
     virtual void mono_profiler_install_jit_end(MonoProfileJitResult end) = 0;
     virtual void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback) = 0;
+    virtual void mono_profiler_install_thread(MonoProfileThreadFunc start, MonoProfileThreadFunc end) = 0;
 };
 
 executor_ptr create_executor();

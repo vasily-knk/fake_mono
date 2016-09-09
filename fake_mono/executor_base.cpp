@@ -1379,3 +1379,9 @@ void executor_base::mono_profiler_install_exception(MonoProfileExceptionFunc thr
 }
 
 
+void executor_base::mono_profiler_install_thread(MonoProfileThreadFunc start, MonoProfileThreadFunc end)
+{
+    return functions_->mono_profiler_install_thread(start, end);
+}
+
+

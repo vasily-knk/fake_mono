@@ -235,6 +235,7 @@ struct functions_t
     typedef void(__cdecl *mono_profiler_install_allocation_t)(MonoProfileAllocFunc callback);
     typedef void(__cdecl *mono_profiler_install_jit_end_t)(MonoProfileJitResult end);
     typedef void(__cdecl *mono_profiler_install_exception_t)(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback);
+    typedef void(__cdecl *mono_profiler_install_thread_t)(MonoProfileThreadFunc start, MonoProfileThreadFunc end);
     
     mono_thread_suspend_all_other_threads_t mono_thread_suspend_all_other_threads = nullptr;
     mono_thread_pool_cleanup_t mono_thread_pool_cleanup = nullptr;
@@ -464,6 +465,7 @@ struct functions_t
     mono_profiler_install_allocation_t mono_profiler_install_allocation = nullptr;
     mono_profiler_install_jit_end_t mono_profiler_install_jit_end = nullptr;
     mono_profiler_install_exception_t mono_profiler_install_exception = nullptr;
+    mono_profiler_install_thread_t mono_profiler_install_thread = nullptr;
 };
 
 functions_t load_mono_functions_from_dll(HMODULE dll);

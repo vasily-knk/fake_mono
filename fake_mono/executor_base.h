@@ -236,6 +236,7 @@ struct executor_base
     void mono_profiler_install_allocation(MonoProfileAllocFunc callback) override;
     void mono_profiler_install_jit_end(MonoProfileJitResult end) override;
     void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback) override;
+    void mono_profiler_install_thread(MonoProfileThreadFunc start, MonoProfileThreadFunc end) override;
     
 protected:
     mono_wrapper::functions_cptr functions() const;

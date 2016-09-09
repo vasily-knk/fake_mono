@@ -2838,7 +2838,8 @@
       { "return_type": "void"       , "name": "mono_profiler_install_gc"             , "args": [{"type": "MonoProfileGCFunc", "name": "callback", "array": false}, { "type": "MonoProfileGCResizeFunc", "name": "heap_resize_callback", "array": false}] },
       { "return_type": "void"       , "name": "mono_profiler_install_allocation"     , "args": [{"type": "MonoProfileAllocFunc", "name": "callback", "array": false}] },
       { "return_type": "void"       , "name": "mono_profiler_install_jit_end"        , "args": [{"type": "MonoProfileJitResult", "name": "end", "array": false}] },
-      { "return_type": "void"       , "name": "mono_profiler_install_exception"      , "args": [{"type": "MonoProfileExceptionFunc", "name": "throw_callback", "array": false}, { "type": "MonoProfileMethodFunc", "name": "exc_method_leave", "array": false}, { "type": "MonoProfileExceptionClauseFunc", "name": "clause_callback", "array": false}] }
+      { "return_type": "void"       , "name": "mono_profiler_install_exception"      , "args": [{"type": "MonoProfileExceptionFunc", "name": "throw_callback", "array": false}, { "type": "MonoProfileMethodFunc", "name": "exc_method_leave", "array": false}, { "type": "MonoProfileExceptionClauseFunc", "name": "clause_callback", "array": false}] },
+      { "return_type": "void", "name": "mono_profiler_install_thread", "args": [{ "type": "MonoProfileThreadFunc", "name": "start", "array": false}, { "type": "MonoProfileThreadFunc", "name":"end", "array":false}] }
 
    ]
 }
