@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <UnityGameDir>C:\Games\Ori\</UnityGameDir>
+    <UnityGameDir>E:\Games\Ori\</UnityGameDir>
     <UnityGameName>oriDE</UnityGameName>
     <UnityGameDataDir>$(UnityGameDir)$(UnityGameName)_Data\</UnityGameDataDir>
     <UnityGameManagedDir>$(UnityGameDataDir)Managed\</UnityGameManagedDir>

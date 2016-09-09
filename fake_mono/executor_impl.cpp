@@ -68,14 +68,14 @@ void executor_impl::init(MonoDomain *domain)
 
 void executor_impl::init_debugger()
 {
-//	const char* options[] =
-//	{
-//		//"--help",
-//		//"--soft-breakpoints",
-//		"--debugger-agent=transport=dt_socket,address=127.0.0.1:10000"
-//	};
-//	executor_base::mono_jit_parse_options(sizeof(options) / sizeof(char*), (char**)options);
-//	executor_base::mono_debug_init(1);
+	const char* options[] =
+	{
+		//"--help",
+		//"--soft-breakpoints",
+		"--debugger-agent=transport=dt_socket,embedding=1,defer=y,address=127.0.0.1:10000"
+	};
+	executor_base::mono_jit_parse_options(sizeof(options) / sizeof(char*), (char**)options);
+	executor_base::mono_debug_init(1);
 }
 
 MonoThread* executor_impl::mono_thread_attach(MonoDomain* domain) 

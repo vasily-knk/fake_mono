@@ -173,6 +173,6 @@ def write_base_source(name, functions_cptr, funcs, out):
 
         write_indent(out, '{return_type} {class_name}::{name}({args_list})\n'.format(**ext_func))
         with BlockWrapper(out):
-            write_indent(out, 'return functions_->{name}({args_names});\n'.format(**func))
+            write_indent(out, 'return functions()->{name}({args_names});\n'.format(**func))
 
         write_indent(out, '\n')
