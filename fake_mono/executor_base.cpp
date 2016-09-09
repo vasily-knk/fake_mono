@@ -1307,3 +1307,75 @@ gint64 executor_base::mono_gc_get_heap_size()
 }
 
 
+MonoMethod* executor_base::mono_method_desc_search_in_class(MonoMethodDesc* desc, MonoClass* klass)
+{
+    return functions_->mono_method_desc_search_in_class(desc, klass);
+}
+
+
+void executor_base::mono_method_desc_free(MonoMethodDesc* desc)
+{
+    return functions_->mono_method_desc_free(desc);
+}
+
+
+char* executor_base::mono_type_get_name_full(MonoType* type, MonoTypeNameFormat format)
+{
+    return functions_->mono_type_get_name_full(type, format);
+}
+
+
+void executor_base::mono_unity_thread_clear_domain_fields()
+{
+    return functions_->mono_unity_thread_clear_domain_fields();
+}
+
+
+void executor_base::mono_unity_set_vprintf_func(vprintf_func func)
+{
+    return functions_->mono_unity_set_vprintf_func(func);
+}
+
+
+void executor_base::mono_profiler_install(MonoProfiler* prof, MonoProfileFunc shutdown_callback)
+{
+    return functions_->mono_profiler_install(prof, shutdown_callback);
+}
+
+
+void executor_base::mono_profiler_set_events(MonoProfileFlags events)
+{
+    return functions_->mono_profiler_set_events(events);
+}
+
+
+void executor_base::mono_profiler_install_enter_leave(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave)
+{
+    return functions_->mono_profiler_install_enter_leave(enter, fleave);
+}
+
+
+void executor_base::mono_profiler_install_gc(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback)
+{
+    return functions_->mono_profiler_install_gc(callback, heap_resize_callback);
+}
+
+
+void executor_base::mono_profiler_install_allocation(MonoProfileAllocFunc callback)
+{
+    return functions_->mono_profiler_install_allocation(callback);
+}
+
+
+void executor_base::mono_profiler_install_jit_end(MonoProfileJitResult end)
+{
+    return functions_->mono_profiler_install_jit_end(end);
+}
+
+
+void executor_base::mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback)
+{
+    return functions_->mono_profiler_install_exception(throw_callback, exc_method_leave, clause_callback);
+}
+
+

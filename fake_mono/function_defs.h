@@ -220,5 +220,17 @@ extern "C"
     void mono_trace_set_mask_string(char* value);
     gint64 mono_gc_get_used_size();
     gint64 mono_gc_get_heap_size();
+    MonoMethod* mono_method_desc_search_in_class(MonoMethodDesc* desc, MonoClass* klass);
+    void mono_method_desc_free(MonoMethodDesc* desc);
+    char* mono_type_get_name_full(MonoType* type, MonoTypeNameFormat format);
+    void mono_unity_thread_clear_domain_fields();
+    void mono_unity_set_vprintf_func(vprintf_func func);
+    void mono_profiler_install(MonoProfiler* prof, MonoProfileFunc shutdown_callback);
+    void mono_profiler_set_events(MonoProfileFlags events);
+    void mono_profiler_install_enter_leave(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave);
+    void mono_profiler_install_gc(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback);
+    void mono_profiler_install_allocation(MonoProfileAllocFunc callback);
+    void mono_profiler_install_jit_end(MonoProfileJitResult end);
+    void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback);
 }
 

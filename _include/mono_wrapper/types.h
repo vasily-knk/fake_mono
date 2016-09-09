@@ -115,6 +115,65 @@ typedef void* (*MonoDlFallbackLoad) (const char *name, int flags, char **err, vo
 typedef void* (*MonoDlFallbackSymbol) (void *handle, const char *name, char **err, void *user_data);
 typedef void* (*MonoDlFallbackClose) (void *handle, void *user_data);
 
+typedef enum {
+	MONO_TYPE_NAME_FORMAT_IL,
+	MONO_TYPE_NAME_FORMAT_REFLECTION,
+	MONO_TYPE_NAME_FORMAT_FULL_NAME,
+	MONO_TYPE_NAME_FORMAT_ASSEMBLY_QUALIFIED
+} MonoTypeNameFormat;
+
+typedef void (*vprintf_func)(const char* msg, va_list args);
+
+struct MonoProfiler;
+typedef void (*MonoProfileFunc) (MonoProfiler *prof);
+
+typedef enum {
+	MONO_PROFILE_NONE = 0,
+	MONO_PROFILE_APPDOMAIN_EVENTS = 1 << 0,
+	MONO_PROFILE_ASSEMBLY_EVENTS  = 1 << 1,
+	MONO_PROFILE_MODULE_EVENTS    = 1 << 2,
+	MONO_PROFILE_CLASS_EVENTS     = 1 << 3,
+	MONO_PROFILE_JIT_COMPILATION  = 1 << 4,
+	MONO_PROFILE_INLINING         = 1 << 5,
+	MONO_PROFILE_EXCEPTIONS       = 1 << 6,
+	MONO_PROFILE_ALLOCATIONS      = 1 << 7,
+	MONO_PROFILE_GC               = 1 << 8,
+	MONO_PROFILE_THREADS          = 1 << 9,
+	MONO_PROFILE_REMOTING         = 1 << 10,
+	MONO_PROFILE_TRANSITIONS      = 1 << 11,
+	MONO_PROFILE_ENTER_LEAVE      = 1 << 12,
+	MONO_PROFILE_COVERAGE         = 1 << 13,
+	MONO_PROFILE_INS_COVERAGE     = 1 << 14,
+	MONO_PROFILE_STATISTICAL      = 1 << 15,
+	MONO_PROFILE_METHOD_EVENTS    = 1 << 16,
+	MONO_PROFILE_MONITOR_EVENTS   = 1 << 17,
+	MONO_PROFILE_IOMAP_EVENTS = 1 << 18, /* this should likely be removed, too */
+	MONO_PROFILE_GC_MOVES = 1 << 19
+} MonoProfileFlags;
+
+typedef enum {
+	MONO_GC_EVENT_START,
+	MONO_GC_EVENT_MARK_START,
+	MONO_GC_EVENT_MARK_END,
+	MONO_GC_EVENT_RECLAIM_START,
+	MONO_GC_EVENT_RECLAIM_END,
+	MONO_GC_EVENT_END,
+	MONO_GC_EVENT_PRE_STOP_WORLD,
+	MONO_GC_EVENT_POST_STOP_WORLD,
+	MONO_GC_EVENT_PRE_START_WORLD,
+	MONO_GC_EVENT_POST_START_WORLD
+} MonoGCEvent;
+
+typedef void (*MonoProfileMethodFunc)   (MonoProfiler *prof, MonoMethod   *method);
+typedef void (*MonoProfileGCFunc)         (MonoProfiler *prof, MonoGCEvent event, int generation);
+typedef void (*MonoProfileGCMoveFunc) (MonoProfiler *prof, void **objects, int num);
+typedef void (*MonoProfileGCResizeFunc)   (MonoProfiler *prof, gint64 new_size);
+typedef void (*MonoProfileAllocFunc)      (MonoProfiler *prof, MonoObject *obj, MonoClass *klass);
+typedef void (*MonoProfileJitResult)      (MonoProfiler *prof, MonoMethod   *method,   MonoJitInfo* jinfo,   int result);
+typedef void (*MonoProfileExceptionFunc) (MonoProfiler *prof, MonoObject *object);
+typedef void (*MonoProfileExceptionClauseFunc) (MonoProfiler *prof, MonoMethod *method, int clause_type, int clause_num);
+
+
 } // namespace types
 } // namespace mono_wrapper
 

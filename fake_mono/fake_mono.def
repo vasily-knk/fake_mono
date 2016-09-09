@@ -216,3 +216,15 @@ EXPORTS
    mono_trace_set_mask_string
    mono_gc_get_used_size
    mono_gc_get_heap_size
+   mono_method_desc_search_in_class
+   mono_method_desc_free
+   mono_type_get_name_full
+   mono_unity_thread_clear_domain_fields
+   mono_unity_set_vprintf_func
+   mono_profiler_install
+   mono_profiler_set_events
+   mono_profiler_install_enter_leave
+   mono_profiler_install_gc
+   mono_profiler_install_allocation
+   mono_profiler_install_jit_end
+   mono_profiler_install_exception

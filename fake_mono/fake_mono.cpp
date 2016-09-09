@@ -1091,3 +1091,63 @@ gint64 mono_gc_get_heap_size()
     return executor_instance()->mono_gc_get_heap_size();
 }
 
+MonoMethod* mono_method_desc_search_in_class(MonoMethodDesc* desc, MonoClass* klass)
+{
+    return executor_instance()->mono_method_desc_search_in_class(desc, klass);
+}
+
+void mono_method_desc_free(MonoMethodDesc* desc)
+{
+    return executor_instance()->mono_method_desc_free(desc);
+}
+
+char* mono_type_get_name_full(MonoType* type, MonoTypeNameFormat format)
+{
+    return executor_instance()->mono_type_get_name_full(type, format);
+}
+
+void mono_unity_thread_clear_domain_fields()
+{
+    return executor_instance()->mono_unity_thread_clear_domain_fields();
+}
+
+void mono_unity_set_vprintf_func(vprintf_func func)
+{
+    return executor_instance()->mono_unity_set_vprintf_func(func);
+}
+
+void mono_profiler_install(MonoProfiler* prof, MonoProfileFunc shutdown_callback)
+{
+    return executor_instance()->mono_profiler_install(prof, shutdown_callback);
+}
+
+void mono_profiler_set_events(MonoProfileFlags events)
+{
+    return executor_instance()->mono_profiler_set_events(events);
+}
+
+void mono_profiler_install_enter_leave(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave)
+{
+    return executor_instance()->mono_profiler_install_enter_leave(enter, fleave);
+}
+
+void mono_profiler_install_gc(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback)
+{
+    return executor_instance()->mono_profiler_install_gc(callback, heap_resize_callback);
+}
+
+void mono_profiler_install_allocation(MonoProfileAllocFunc callback)
+{
+    return executor_instance()->mono_profiler_install_allocation(callback);
+}
+
+void mono_profiler_install_jit_end(MonoProfileJitResult end)
+{
+    return executor_instance()->mono_profiler_install_jit_end(end);
+}
+
+void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback)
+{
+    return executor_instance()->mono_profiler_install_exception(throw_callback, exc_method_leave, clause_callback);
+}
+

@@ -223,6 +223,18 @@ struct functions_t
     typedef void(__cdecl *mono_trace_set_mask_string_t)(char* value);
     typedef gint64(__cdecl *mono_gc_get_used_size_t)();
     typedef gint64(__cdecl *mono_gc_get_heap_size_t)();
+    typedef MonoMethod*(__cdecl *mono_method_desc_search_in_class_t)(MonoMethodDesc* desc, MonoClass* klass);
+    typedef void(__cdecl *mono_method_desc_free_t)(MonoMethodDesc* desc);
+    typedef char*(__cdecl *mono_type_get_name_full_t)(MonoType* type, MonoTypeNameFormat format);
+    typedef void(__cdecl *mono_unity_thread_clear_domain_fields_t)();
+    typedef void(__cdecl *mono_unity_set_vprintf_func_t)(vprintf_func func);
+    typedef void(__cdecl *mono_profiler_install_t)(MonoProfiler* prof, MonoProfileFunc shutdown_callback);
+    typedef void(__cdecl *mono_profiler_set_events_t)(MonoProfileFlags events);
+    typedef void(__cdecl *mono_profiler_install_enter_leave_t)(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave);
+    typedef void(__cdecl *mono_profiler_install_gc_t)(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback);
+    typedef void(__cdecl *mono_profiler_install_allocation_t)(MonoProfileAllocFunc callback);
+    typedef void(__cdecl *mono_profiler_install_jit_end_t)(MonoProfileJitResult end);
+    typedef void(__cdecl *mono_profiler_install_exception_t)(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback);
     
     mono_thread_suspend_all_other_threads_t mono_thread_suspend_all_other_threads = nullptr;
     mono_thread_pool_cleanup_t mono_thread_pool_cleanup = nullptr;
@@ -440,6 +452,18 @@ struct functions_t
     mono_trace_set_mask_string_t mono_trace_set_mask_string = nullptr;
     mono_gc_get_used_size_t mono_gc_get_used_size = nullptr;
     mono_gc_get_heap_size_t mono_gc_get_heap_size = nullptr;
+    mono_method_desc_search_in_class_t mono_method_desc_search_in_class = nullptr;
+    mono_method_desc_free_t mono_method_desc_free = nullptr;
+    mono_type_get_name_full_t mono_type_get_name_full = nullptr;
+    mono_unity_thread_clear_domain_fields_t mono_unity_thread_clear_domain_fields = nullptr;
+    mono_unity_set_vprintf_func_t mono_unity_set_vprintf_func = nullptr;
+    mono_profiler_install_t mono_profiler_install = nullptr;
+    mono_profiler_set_events_t mono_profiler_set_events = nullptr;
+    mono_profiler_install_enter_leave_t mono_profiler_install_enter_leave = nullptr;
+    mono_profiler_install_gc_t mono_profiler_install_gc = nullptr;
+    mono_profiler_install_allocation_t mono_profiler_install_allocation = nullptr;
+    mono_profiler_install_jit_end_t mono_profiler_install_jit_end = nullptr;
+    mono_profiler_install_exception_t mono_profiler_install_exception = nullptr;
 };
 
 functions_t load_mono_functions_from_dll(HMODULE dll);

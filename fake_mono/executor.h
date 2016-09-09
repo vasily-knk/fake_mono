@@ -224,6 +224,18 @@ struct executor
     virtual void mono_trace_set_mask_string(char* value) = 0;
     virtual gint64 mono_gc_get_used_size() = 0;
     virtual gint64 mono_gc_get_heap_size() = 0;
+    virtual MonoMethod* mono_method_desc_search_in_class(MonoMethodDesc* desc, MonoClass* klass) = 0;
+    virtual void mono_method_desc_free(MonoMethodDesc* desc) = 0;
+    virtual char* mono_type_get_name_full(MonoType* type, MonoTypeNameFormat format) = 0;
+    virtual void mono_unity_thread_clear_domain_fields() = 0;
+    virtual void mono_unity_set_vprintf_func(vprintf_func func) = 0;
+    virtual void mono_profiler_install(MonoProfiler* prof, MonoProfileFunc shutdown_callback) = 0;
+    virtual void mono_profiler_set_events(MonoProfileFlags events) = 0;
+    virtual void mono_profiler_install_enter_leave(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave) = 0;
+    virtual void mono_profiler_install_gc(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback) = 0;
+    virtual void mono_profiler_install_allocation(MonoProfileAllocFunc callback) = 0;
+    virtual void mono_profiler_install_jit_end(MonoProfileJitResult end) = 0;
+    virtual void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback) = 0;
 };
 
 executor_ptr create_executor();

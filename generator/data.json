@@ -2825,6 +2825,20 @@
          "args":[
 
          ]
-      }
+      },
+
+      { "return_type": "MonoMethod*", "name": "mono_method_desc_search_in_class"     , "args": [{"type": "MonoMethodDesc*", "name": "desc", "array": false}, { "type": "MonoClass*", "name": "klass", "array": false}] },
+      { "return_type": "void"       , "name": "mono_method_desc_free"                , "args": [{"type": "MonoMethodDesc*", "name": "desc", "array": false}] },
+      { "return_type": "char*"      , "name": "mono_type_get_name_full"              , "args": [{"type": "MonoType*", "name": "type", "array": false}, { "type": "MonoTypeNameFormat", "name": "format", "array": false}] },
+      { "return_type": "void"       , "name": "mono_unity_thread_clear_domain_fields", "args": [] },
+      { "return_type": "void"       , "name": "mono_unity_set_vprintf_func"          , "args": [{"type": "vprintf_func", "name": "func", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install"                , "args": [{"type": "MonoProfiler*", "name": "prof", "array": false}, { "type": "MonoProfileFunc", "name": "shutdown_callback", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_set_events"             , "args": [{"type": "MonoProfileFlags", "name": "events", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install_enter_leave"    , "args": [{"type": "MonoProfileMethodFunc", "name": "enter", "array": false}, { "type": "MonoProfileMethodFunc", "name": "fleave", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install_gc"             , "args": [{"type": "MonoProfileGCFunc", "name": "callback", "array": false}, { "type": "MonoProfileGCResizeFunc", "name": "heap_resize_callback", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install_allocation"     , "args": [{"type": "MonoProfileAllocFunc", "name": "callback", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install_jit_end"        , "args": [{"type": "MonoProfileJitResult", "name": "end", "array": false}] },
+      { "return_type": "void"       , "name": "mono_profiler_install_exception"      , "args": [{"type": "MonoProfileExceptionFunc", "name": "throw_callback", "array": false}, { "type": "MonoProfileMethodFunc", "name": "exc_method_leave", "array": false}, { "type": "MonoProfileExceptionClauseFunc", "name": "clause_callback", "array": false}] }
+
    ]
 }

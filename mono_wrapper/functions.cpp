@@ -223,6 +223,18 @@ functions_t load_mono_functions_from_dll(HMODULE dll)
     result.mono_trace_set_mask_string = reinterpret_cast<functions_t::mono_trace_set_mask_string_t>(GetProcAddress(dll, "mono_trace_set_mask_string"));
     result.mono_gc_get_used_size = reinterpret_cast<functions_t::mono_gc_get_used_size_t>(GetProcAddress(dll, "mono_gc_get_used_size"));
     result.mono_gc_get_heap_size = reinterpret_cast<functions_t::mono_gc_get_heap_size_t>(GetProcAddress(dll, "mono_gc_get_heap_size"));
+    result.mono_method_desc_search_in_class = reinterpret_cast<functions_t::mono_method_desc_search_in_class_t>(GetProcAddress(dll, "mono_method_desc_search_in_class"));
+    result.mono_method_desc_free = reinterpret_cast<functions_t::mono_method_desc_free_t>(GetProcAddress(dll, "mono_method_desc_free"));
+    result.mono_type_get_name_full = reinterpret_cast<functions_t::mono_type_get_name_full_t>(GetProcAddress(dll, "mono_type_get_name_full"));
+    result.mono_unity_thread_clear_domain_fields = reinterpret_cast<functions_t::mono_unity_thread_clear_domain_fields_t>(GetProcAddress(dll, "mono_unity_thread_clear_domain_fields"));
+    result.mono_unity_set_vprintf_func = reinterpret_cast<functions_t::mono_unity_set_vprintf_func_t>(GetProcAddress(dll, "mono_unity_set_vprintf_func"));
+    result.mono_profiler_install = reinterpret_cast<functions_t::mono_profiler_install_t>(GetProcAddress(dll, "mono_profiler_install"));
+    result.mono_profiler_set_events = reinterpret_cast<functions_t::mono_profiler_set_events_t>(GetProcAddress(dll, "mono_profiler_set_events"));
+    result.mono_profiler_install_enter_leave = reinterpret_cast<functions_t::mono_profiler_install_enter_leave_t>(GetProcAddress(dll, "mono_profiler_install_enter_leave"));
+    result.mono_profiler_install_gc = reinterpret_cast<functions_t::mono_profiler_install_gc_t>(GetProcAddress(dll, "mono_profiler_install_gc"));
+    result.mono_profiler_install_allocation = reinterpret_cast<functions_t::mono_profiler_install_allocation_t>(GetProcAddress(dll, "mono_profiler_install_allocation"));
+    result.mono_profiler_install_jit_end = reinterpret_cast<functions_t::mono_profiler_install_jit_end_t>(GetProcAddress(dll, "mono_profiler_install_jit_end"));
+    result.mono_profiler_install_exception = reinterpret_cast<functions_t::mono_profiler_install_exception_t>(GetProcAddress(dll, "mono_profiler_install_exception"));
     
     return result;
 }

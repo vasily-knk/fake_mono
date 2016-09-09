@@ -224,6 +224,18 @@ struct executor_base
     void mono_trace_set_mask_string(char* value) override;
     gint64 mono_gc_get_used_size() override;
     gint64 mono_gc_get_heap_size() override;
+    MonoMethod* mono_method_desc_search_in_class(MonoMethodDesc* desc, MonoClass* klass) override;
+    void mono_method_desc_free(MonoMethodDesc* desc) override;
+    char* mono_type_get_name_full(MonoType* type, MonoTypeNameFormat format) override;
+    void mono_unity_thread_clear_domain_fields() override;
+    void mono_unity_set_vprintf_func(vprintf_func func) override;
+    void mono_profiler_install(MonoProfiler* prof, MonoProfileFunc shutdown_callback) override;
+    void mono_profiler_set_events(MonoProfileFlags events) override;
+    void mono_profiler_install_enter_leave(MonoProfileMethodFunc enter, MonoProfileMethodFunc fleave) override;
+    void mono_profiler_install_gc(MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback) override;
+    void mono_profiler_install_allocation(MonoProfileAllocFunc callback) override;
+    void mono_profiler_install_jit_end(MonoProfileJitResult end) override;
+    void mono_profiler_install_exception(MonoProfileExceptionFunc throw_callback, MonoProfileMethodFunc exc_method_leave, MonoProfileExceptionClauseFunc clause_callback) override;
     
 protected:
     mono_wrapper::functions_cptr functions() const;
