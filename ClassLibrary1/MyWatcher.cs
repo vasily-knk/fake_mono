@@ -129,7 +129,7 @@ namespace ClassLibrary1
                         if (w.IsAlive)
                         {
                             _objectDatas[i].Fill(w.Target as GameObject);
-                            ++i;
+                            ++i;    
                         }
                     }
 
@@ -151,6 +151,7 @@ namespace ClassLibrary1
 
         void Update()
         {
+            Aaa(10);
             if (Input.GetKeyDown(KeyCode.L))
                 Destroy(gameObject);
 
@@ -172,11 +173,19 @@ namespace ClassLibrary1
                 Class1.Print(String.Format("Objects update rate: {0}\n", _objectsUpdateRate));
         }
 
+        void Aaa(int c)
+        {
+            if (c > 0)
+                Aaa(c - 1);
+        }
+
 
         private void UpdateObjectsCache()
         {
             var foundObjects = FindObjectsOfType<GameObject>();
             _objectsCache = foundObjects.Select(o => new WeakReference(o)).ToArray();
+            int aaa = 2;
+            aaa = 5;
         }
 
         private void PrintObjects()

@@ -82,7 +82,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(UnityGameManagedDir)
+    <PostBuildEvent>cd $(ProjectDir)
+"C:\Program Files\Unity\Editor\Data\Mono\bin\smcs" -out:$(UnityGameManagedDir)$(TargetFileName) @build 
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

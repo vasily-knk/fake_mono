@@ -1,0 +1,4 @@
+-debug
+-target:library
+-r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll"
+*.cs
