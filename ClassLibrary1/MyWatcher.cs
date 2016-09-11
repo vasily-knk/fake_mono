@@ -18,76 +18,93 @@ namespace ClassLibrary1
         }
     }
 
-    public struct ObjectData
+    struct UpdateData
     {
-        public int Id;
-        public Vector3 Pos;
+        public readonly long Frame;
+        public readonly Vector3 Pos;
 
-        public ObjectData(GameObject o)
+        public UpdateData(long frame, GameObject o)
         {
-            Id = o.GetInstanceID();
-            Pos = ObjectDataOps.ExtractPos(o);
+            Frame = frame;
+            Pos = o.transform.position;
         }
 
-        public void Fill(GameObject o)
+        public bool UpdateEquals(UpdateData prev)
         {
-            Id = o.GetInstanceID();
-            Pos = ObjectDataOps.ExtractPos(o);
+            return Pos.Equals(prev.Pos);
         }
     }
 
-    struct Delta
+    public class ObjectData
     {
-        public readonly KeyValuePair<long, ObjectData>[] Created;
-        public readonly long[] Deleted;
-        public readonly KeyValuePair<long, Vector3>[] DeltaPos;
+        private bool _isInitialized = false;
+        private readonly long _initialFrame;
+        private readonly WeakReference _objectRef;
+        private readonly List<UpdateData> _updates = new List<UpdateData>();
 
-        public Delta(KeyValuePair<long, ObjectData>[] created, long[] deleted, KeyValuePair<long, Vector3>[] deltaPos)
+        public readonly int Id;
+        public String Name { get; private set; }
+
+        public bool IsAlive
         {
-            Created = created;
-            Deleted = deleted;
-            DeltaPos = deltaPos;
+            get
+            {
+                return _objectRef.IsAlive;
+            }
         }
-    }
 
-    public struct TempStruct
-    {
-        public readonly int i;
-        public readonly float f;
-
-        public TempStruct(int i, float f)
+        public ObjectData(long frame, GameObject o)
         {
-            this.i = i;
-            this.f = f;
+            _initialFrame = frame;
+            _objectRef = new WeakReference(o);
+
+            Id = o.GetInstanceID();
+            Name = "--unnamed--";
         }
+
+        public void Update(long frame)
+        {
+            var o = _objectRef.Target as GameObject;
+            if (!o)
+                return;
+
+            if (!_isInitialized)
+            {
+                Name = o.name;
+                _isInitialized = true;
+            }
+
+            var ud = new UpdateData(frame, o);
+            if (!_updates.Any() || !_updates.Last().UpdateEquals(ud))
+                _updates.Add(ud);
+        }
+
     }
 
     public class MyWatcher
         : MonoBehaviour
     {
-        private int _numReports = 0;
         private long _frame = 0;
-        private readonly Stopwatch _profilerTotal = new Stopwatch();
-        private readonly Stopwatch _profilerRetrieval = new Stopwatch();
-        private readonly Stopwatch _profilerProcessing = new Stopwatch();
-        private int _objectsUpdateRate = 16;
+        private int _objectsUpdateRate = 32;
+        private List<ObjectData> _objectDatas = new List<ObjectData>();
 
-        private WeakReference[] _objectsCache = {};
-        private ObjectData[] _objectDatas = {};
-        private int _numObjectDatas = 0;
-
-        public static GameObject CreateObject()
+        public static MyWatcher CreateObject()
         {
             var o = new GameObject("MyWatcher");
-            o.AddComponent<MyWatcher>();
-            return o;
+            var w = o.AddComponent<MyWatcher>();
+            return w;
         }
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        public static extern void OnObjectDestroying(GameObject o);
+        public static extern void OnObjectDestroying(MyWatcher o);
 
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        public static extern void ReportMe(TempStruct s);
+        public void RegisterObject(GameObject o)
+        {
+            if (o == gameObject)
+                return;
+
+            _objectDatas.Add(new ObjectData(_frame, o));
+        }
 
         void Start()
         {
@@ -97,147 +114,68 @@ namespace ClassLibrary1
         void OnDestroy()
         {
             Class1.Print("MyWatcher being destroyed.\n");
-            OnObjectDestroying(gameObject);
+            OnObjectDestroying(this);
         }
-
 
         void FixedUpdate()
         {
-            using (new StopwatchWrapper(_profilerTotal))
+            try
             {
-                using (new StopwatchWrapper(_profilerRetrieval))
-                {
-                    if (_frame%_objectsUpdateRate == 0)
-                        UpdateObjectsCache();
-                }
+                if (_frame % _objectsUpdateRate == 0)
+                    UpdateObjectsCache();
 
-                using (new StopwatchWrapper(_profilerProcessing))
-                {
-                    if (_objectDatas.Length < _objectsCache.Length)
-                    {
-                        int newSize = 1;
-                        for (; newSize < _objectsCache.Length; newSize *= 2) { }
+                foreach (var data in _objectDatas)
+                    data.Update(_frame);
 
-                        Class1.Print(String.Format("Resizing array to {0}\n", newSize));
-                        _objectDatas = new ObjectData[newSize];
-                    }
-
-                    int i = 0;
-
-                    foreach (var w in _objectsCache)
-                    {
-                        if (w.IsAlive)
-                        {
-                            _objectDatas[i].Fill(w.Target as GameObject);
-                            ++i;    
-                        }
-                    }
-
-                    _numObjectDatas = i;
-                }
-
-                ++_frame;
             }
-
-            updateFPS();
+            catch (Exception e)
+            {
+                Class1.Print(String.Format("Error: {0}\nStack: {1}\n", e.Message, e.StackTrace));
+                throw e;
+            }
+            
+            ++_frame;
         }
-
-        private static void BeSlow()
-        {
-            //Thread.Sleep(1000);
-            Class1.Print("Hello!\n");
-        }
-
 
         void Update()
         {
-            Aaa(10);
             if (Input.GetKeyDown(KeyCode.L))
                 Destroy(gameObject);
-
-            bool printUpdateRate = false;
+   
             if (Input.GetKeyDown(KeyCode.O))
             {
-                if (_objectsUpdateRate > 1)
-                    _objectsUpdateRate /= 2;
-                printUpdateRate = true;
+                var oris = _objectDatas.Where(o => o.Name.ToLower().Contains("ori")).ToArray();
             }
-            
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                _objectsUpdateRate *= 2;
-                printUpdateRate = true;
-            }
-
-            if (printUpdateRate)
-                Class1.Print(String.Format("Objects update rate: {0}\n", _objectsUpdateRate));
         }
-
-        void Aaa(int c)
-        {
-            if (c > 0)
-                Aaa(c - 1);
-        }
-
 
         private void UpdateObjectsCache()
         {
-            var foundObjects = FindObjectsOfType<GameObject>();
-            _objectsCache = foundObjects.Select(o => new WeakReference(o)).ToArray();
-            int aaa = 2;
-            aaa = 5;
+            var alive = _objectDatas.Where(d => d.IsAlive);
+            _objectDatas = alive.ToList();
         }
 
-        private void PrintObjects()
-        {
-            var objects = FindObjectsOfType<GameObject>();
-
-            var builder = new StringBuilder();
-            builder.Append(String.Format("----- MyWatcher report {0}:\n", _numReports));
-
-//             foreach (GameObject obj in objects)
-//             {
-//                 builder.Append(String.Format("  {0}:\n", obj.name));
-// 
-//                 var comps = obj.GetComponents<Component>();
-//                 foreach (Component comp in comps)
-//                 {
-//                     builder.Append(String.Format("    {0}\n", comp.ToString()));
-//                 }
-//             }
-
-            builder.Append(String.Format("----- End of MyWatcher report {0}\n", _numReports));
-
-            Class1.Print(builder.ToString());
-        }
-
-        private long idForObject(GameObject o)
-        {
-            return o.GetInstanceID();
-        }
-
-        private void updateFPS()
-        {
-            const int numFrames = 60;
-            if (_frame % numFrames == 0)
-            {
-                var s = new StringBuilder();
-                s.Append("Stats:\n")
-                    .AppendFormat("   Retrival  : {0}\n", getAvgProfMicrosecs(_profilerRetrieval , numFrames))
-                    .AppendFormat("   Processing: {0}\n", getAvgProfMicrosecs(_profilerProcessing, numFrames))
-                    .AppendFormat("   Total     : {0}\n", getAvgProfMicrosecs(_profilerTotal     , numFrames))
-                    ;
-
-                Class1.Print(s.ToString());
-            }
-        }
-
-        private long getAvgProfMicrosecs(Stopwatch prof, int numFrames)
-        {
-            var avgTicks = prof.Elapsed.Ticks / numFrames;
-            var avgMicrosecs = avgTicks / 10;
-            prof.Reset();
-            return avgMicrosecs;
-        }
+//        private void updateFPS()
+//        {
+//            const int numFrames = 60;
+//            if (_frame % numFrames == 0)
+//            {
+//                var s = new StringBuilder();
+//                s.Append("Stats:\n")
+//                    .AppendFormat("   Retrival  : {0}\n", getAvgProfMicrosecs(_profilerRetrieval , numFrames))
+//                    .AppendFormat("   Processing: {0}\n", getAvgProfMicrosecs(_profilerProcessing, numFrames))
+//                    .AppendFormat("   Total     : {0}\n", getAvgProfMicrosecs(_profilerTotal     , numFrames))
+//                    ;
+//
+//                Class1.Print(s.ToString());
+//            }
+//        }
+//
+//        private long getAvgProfMicrosecs(Stopwatch prof, int numFrames)
+//        {
+//            var avgTicks = prof.Elapsed.Ticks / numFrames;
+//            var avgMicrosecs = avgTicks / 10;
+//            prof.Reset();
+//            return avgMicrosecs;
+//        }
     }
 }

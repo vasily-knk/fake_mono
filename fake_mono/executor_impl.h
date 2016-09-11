@@ -46,6 +46,18 @@ private:
     static void internal_print(MonoString *str);
 
 private:
+    static void create_gameobject(MonoObject *go, MonoObject *name);
+    static MonoObject *clone_single(MonoObject *data);
+    static MonoObject *instantiate_single(MonoObject *data, MonoStruct_out pos, MonoStruct_out rot);
+
+    static void register_gameobject(MonoObject *go);
+
+private:
+    static gconstpointer real_create_gameobject;
+    static gconstpointer real_clone_single;
+    static gconstpointer real_instantiate_single;
+
+private:
     fs::path assembly_dir_;
     mutable boost::mutex assembly_dir_mutex_;
 
@@ -53,7 +65,7 @@ private:
     shared_ptr<boost::thread::id> main_thread_id_;
     std::atomic<bool> pending_watcher_creation_ = true;
 
-    static std::map<MonoObject*, std::weak_ptr<executor_impl>> watchers_to_executors_;
+    static std::map<MonoObject *, std::weak_ptr<executor_impl>> watchers_to_executors_;
 
     struct watcher_data_t
     {

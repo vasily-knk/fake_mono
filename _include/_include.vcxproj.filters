@@ -63,5 +63,8 @@
     <ClInclude Include="mono_wrapper\Struct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mono_wrapper\MyWatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

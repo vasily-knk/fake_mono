@@ -22,4 +22,7 @@ namespace mono_wrapper
     struct Transform;
     typedef shared_ptr<Transform> Transform_ptr;
     struct Vector3;
+    
+    struct MyWatcher;
+    typedef shared_ptr<MyWatcher> MyWatcher_ptr;
 }

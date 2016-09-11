@@ -28,6 +28,7 @@
     <ClInclude Include="mono_wrapper\class_desc.h" />
     <ClInclude Include="mono_wrapper\GameObject.h" />
     <ClInclude Include="mono_wrapper\mono_wrapper_fwd.h" />
+    <ClInclude Include="mono_wrapper\MyWatcher.h" />
     <ClInclude Include="mono_wrapper\object.h" />
     <ClInclude Include="mono_wrapper\object_base.h" />
     <ClInclude Include="mono_wrapper\String.h" />

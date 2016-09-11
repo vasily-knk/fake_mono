@@ -36,6 +36,9 @@
     <ClInclude Include="Struct_impl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyWatcher_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Struct_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyWatcher_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

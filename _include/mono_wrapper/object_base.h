@@ -15,7 +15,7 @@ struct object_base
 
     ~object_base()
     {
-        f_->mono_gchandle_free(handle_);
+        //f_->mono_gchandle_free(handle_);
     }
 
 
@@ -57,6 +57,11 @@ public:
         return f_->mono_runtime_invoke(m, get_object(), args, nullptr);
     }
     
+    MonoObject *invoke_method_ex(MonoMethod *m, void *args[], MonoObject** exc) const
+    {
+        return f_->mono_runtime_invoke(m, get_object(), args, exc);
+    }
+
     template<typename T>
     T unbox(MonoObject *obj) const
     {

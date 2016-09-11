@@ -7,6 +7,7 @@
 #include "mono_wrapper/String.h"
 #include "mono_wrapper/GameObject.h"
 #include "mono_wrapper/Transform.h"
+#include "mono_wrapper/MyWatcher.h"
 
 #include "unity_input_context.h"
 #include "function_defs.h"
@@ -14,39 +15,13 @@
 #include "stats_manager.h"
 #include "mono_wrapper/Struct.h"
 
-std::map<MonoObject*, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
+std::map<MonoObject *, std::weak_ptr<executor_impl>> executor_impl::watchers_to_executors_;
+gconstpointer executor_impl::real_create_gameobject = nullptr;
+gconstpointer executor_impl::real_clone_single = nullptr;
+gconstpointer executor_impl::real_instantiate_single = nullptr;
 
 mono_wrapper::functions_cptr mono_functions();
 
-
-namespace transform_detail
-{
-    gconstpointer real_set_position = nullptr;
-    gconstpointer real_create_gameobject = nullptr;
-
-    void set_position(MonoObject *self, mono_wrapper::Vector3 *value)
-    {
-        typedef void(__cdecl * f_t)(MonoObject *, mono_wrapper::Vector3 *);
-        auto real_function = reinterpret_cast<f_t>(real_set_position);
-
-        auto f = mono_functions();
-        auto self_ptr = mono_wrapper::wrap_Transform(f, self);
-        stats_manager_instance()->set_position(self_ptr, value);
-        real_function(self, value);
-    }
-
-    void create_gameobject(MonoObject *go, MonoObject *name)
-    {
-        typedef void(__cdecl * f_t)(MonoObject *, MonoObject *);
-        auto real_function = reinterpret_cast<f_t>(real_create_gameobject);
-
-        auto f = mono_functions();
-        real_function(go, name);
-        auto go_ptr = mono_wrapper::wrap_GameObject(f, go);
-        stats_manager_instance()->create_gameobject(go_ptr);
-    }
-
-} // namespace transform_detail
 
 
 executor_ptr create_executor()
@@ -107,15 +82,20 @@ void executor_impl::mono_add_internal_call(const char* name, gconstpointer metho
     
     if (auto m = unity_input::context::register_function(name, method))
         new_method = m;
-    else if (!strcmp(name, "UnityEngine.Transform::INTERNAL_set_position"))
-    {
-        transform_detail::real_set_position = method;
-        new_method = transform_detail::set_position;
-    }
     else if (!strcmp(name, "UnityEngine.GameObject::Internal_CreateGameObject"))
     {
-        transform_detail::real_create_gameobject = method;
-        new_method = transform_detail::create_gameobject;
+        real_create_gameobject = method;
+        new_method = create_gameobject;
+    }
+    else if (!strcmp(name, "UnityEngine.Object::INTERNAL_CALL_Internal_InstantiateSingle"))
+    {
+        real_instantiate_single = method;
+        new_method = instantiate_single;
+    }
+    else if (!strcmp(name, "UnityEngine.Object::Internal_CloneSingle"))
+    {
+        real_clone_single = method;
+        new_method = clone_single;
     }
     
     
@@ -128,6 +108,11 @@ executor_impl::~executor_impl()
 
 MonoObject* executor_impl::mono_runtime_invoke(MonoMethod* method, void* p_obj, void** params, MonoObject** exc) 
 {
+    auto method_name = functions()->mono_method_get_name(method);
+    auto method_class = functions()->mono_method_get_class(method);
+    auto method_class_name = functions()->mono_class_get_name(method_class);
+    (void)method_class_name;
+
     if (pending_watcher_creation_.load())
     {
         auto thread_id = boost::this_thread::get_id();
@@ -140,7 +125,6 @@ MonoObject* executor_impl::mono_runtime_invoke(MonoMethod* method, void* p_obj, 
                 "Start",
             };
             
-            char const *method_name = functions()->mono_method_get_name(method);
             auto it = boost::find_if(method_names, [method_name](char const *n)
             {
                 return !strcmp(n, method_name);
@@ -330,4 +314,48 @@ void executor_impl::internal_print(MonoString *str)
     log_stream() << cstr << std::flush;
 }
 
+
+void executor_impl::create_gameobject(MonoObject *go, MonoObject *name)
+{
+    typedef void(__cdecl * f_t)(MonoObject *, MonoObject *);
+    auto real_function = reinterpret_cast<f_t>(real_create_gameobject);
+
+    real_function(go, name);
+    register_gameobject(go);
+}
+
+MonoObject* executor_impl::clone_single(MonoObject* data)
+{
+    typedef MonoObject* (__cdecl * f_t)(MonoObject *);
+    auto real_function = reinterpret_cast<f_t>(real_clone_single);
+
+    auto go = real_function(data);
+    register_gameobject(go);
+
+    return go;
+}
+
+MonoObject* executor_impl::instantiate_single(MonoObject* data, MonoStruct_out pos, MonoStruct_out rot)
+{
+    typedef MonoObject* (__cdecl * f_t)(MonoObject *, MonoStruct_out, MonoStruct_out);
+    auto real_function = reinterpret_cast<f_t>(real_instantiate_single);
+
+    auto go = real_function(data, pos, rot);
+    register_gameobject(go);
+
+    return go;
+}
+
+void executor_impl::register_gameobject(MonoObject* go)
+{
+    auto f = mono_functions();
+
+    auto game_object = mono_wrapper::wrap_GameObject(f, go);
+
+    for (auto const &r : watchers_to_executors_)
+    {
+        auto watcher = mono_wrapper::wrap_MyWatcher(f, r.first);
+        watcher->RegisterObject(game_object);
+    }
+}
 
